@@ -19,77 +19,84 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
+require 'yamtg/mana'
+
 module YAMTG
     class Card
         class << self
-            def inherited(by)
-                by.init
+            def inherited( subclass )
+                subclass.init
             end
 
             def init
-                @params = {
-                    :cost        => Mana.new,
-                    :types       => [],
-                    :name        => "",
-                    :description => "",
-                    :legend      => "",
+                class_variable_set :@@cost          , Mana.new
+                class_variable_set :@@types         , []
+                class_variable_set :@@colors        , []
+                class_variable_set :@@name          , ""
+                class_variable_set :@@description   , ""
+                class_variable_set :@@legend        , ""
+            end
+
+            attr_accessor :params
+
+            def param( name )
+                define_method( name ) { |*args|
+                    return params[name] if args.empty?
+                    params[name] = args.first
                 }
             end
 
-            def param(name)
-                define_method(name) { |*args|
-                    if args.empty? then
-                        @params[name]
-                    else
-                        @params[name] = args.first
-                    end
-                }
+            def cost( *mana )
+                class_variable_set :@@cost, mana.inject( Mana.new ) { |a, b| a + b }
             end
 
-            def cost(*mana)
-                @params[:cost] = mana.inject(Mana.new) { |a,b| a+b }
+            def name( val )     class_variable_set( :@@name, val );    end
+            def type( *val )    class_variable_set( :@@types, val );   end
+            def legend( val )   class_variable_set( :@@legend, val );  end
+
+            def ability( *val )
+                # TODO
+            end
+            def event( *val )
+                # TODO
             end
 
-            def name(val)
-                @name = val
+            def flying
+                # TODO
+            end
+            def first_strike
+                # TODO
             end
 
-            def description(val)
-                @params[:description] = val
+            def description( val )
+                class_variable_set :@@description, val
             end
         end
 
-        # Name of this card
-        attr_reader :name
+        attr_reader :name           # Name of this card
+        attr_reader :cost           # Mana this card costs to play
+        attr_reader :description    # Description of abilities of this card
+        attr_reader :legend         # An entertaining string with a piece of story for the player
+        # attr_reader :tokens         # How many of any token is on this card
+        # attr_reader :zone           # :library, :hand, :field, :graveyard, :out_of_game, :transit_<from>_<to>
 
-        # Mana this card costs to play
-        attr_reader :cost
+        attr_accessor   :power, :toughness
 
-        # English description of abilities of this card
-        attr_reader :description
+        attr_reader     :owner
 
-        # An entertaining string with a piece of story for the player
-        attr_reader :legend
-
-        # how many of any token is on this card
-        attr_reader :tokens
-
-        # :library, :hand, :field, :graveyard, :out_of_game, :transit_<from>_<to>
-        attr_reader :zone
-
-        def initialize(name, params)
-            @name        = name.freeze
-            @cost        = params.delete(:cost)
-            @colors      = params.delete(:colors) || @cost.infer_color
-            @class       = params.delete(:class)
-            @types       = params.delete(:types) || []
-            @description = params.delete(:description) || ""
-            @legend      = params.delete(:legend) || ""
+        def initialize( *params )
+            puts "CARD::CARD(#{self}/#{self.class}) in=#{instance_variables}  cl=#{self.class.class_variables}"
+            # @name        = self.class.class_variables[ :@@name ]
+            @cost        = @@cost
+            @colors      = @@colors || ( @cost.infer_color if @cost )
+            @types       = @@types
+            @description = @@description
+            @legend      = @@legend
 
             @tapped       = false
-            @zone         = nil
+            # @zone         = nil
             @attachements = []    # cards (enchantments, equipments) attached to this card
-            @tokens       = Hash.new(0)
+            # @tokens       = Hash.new(0)
         end
 
         def class?(klass)
@@ -115,5 +122,8 @@ module YAMTG
         def detach(card)
             @attachements.delete(card)
         end
+    end
+
+    class Source < Card
     end
 end

@@ -1,7 +1,7 @@
+#!/usr/bin/env ruby
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
-#    (C) 2009-2010, Vasiliy Yeremeyev <vayerx@gmail.com>,                   #
-#    (C) 2007, Stefan Rusterholz (rubyoh).                                  #
+#    (C) 2009-2010, Vasiliy Yeremeyev <vayerx@gmail.com>.                   #
 #                                                                           #
 #    This program is free software; you can redistribute it and/or modify   #
 #    it under the terms of the GNU General Public License as published by   #
@@ -19,47 +19,19 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require 'yamtg/card'
+require "yamtg/sets/alpha.rb"
+require "test/unit"
 
-module YAMTG
-    class Creature < Card
-        class << self
-            def inherited(by)
-                super
-                by.power 0
-                by.toughness 0
-            end
-
-            def power( value ); @power = value; end
-            # def power=( value ); @power = value; end
-            # def power;           @power != Nil ? @power : @@power; end
-
-            def toughness( value ); @toughness = value; end
-            # def toughness= ( value );   @toughness = value; end
-            # def toughness;              @toughness != Nil ? @toughness : @@toughness; end
-        end
-
-        def unmodified_power;        @@power;        end
-        def unmodified_toughness;    @@toughness;    end
-
-        def initialize( *params )
-            super( *params )
-            puts "CRATURE(#{self}/#{self.class}) in=#{instance_variables}  cl=#{self.class.class_variables}"
-            puts "#{@name}"
-        end
-
-        def can_attack?
-            !tapped?
-        end
-
-        def can_defend?
-            !tapped?
-        end
+class TestCore < Test::Unit::TestCase
+    include YAMTG
+    def test_simple
+        dead_rat_class = AlphaSet.instance.card( 'Dead Rat' )
+        assert( dead_rat_class )
+        dead_rat = dead_rat_class.new
+        assert( dead_rat )
+        puts "DEAD RAT: #{dead_rat.inspect}"
+        assert( dead_rat.kind_of? Creature )
+        assert_equal( 'Dead Rat', dead_rat.name )
     end
 
-    class Defender < Creature
-        def can_attack?
-            false
-        end
-    end
 end

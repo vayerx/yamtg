@@ -19,36 +19,58 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
+require 'yamtg/creature'
+
 module YAMTG
     class Set
-        def self.load(dir)
+#         def self.load(dir)
+#             # TODO
+#         end
+
+        def initialize
+            @cards = Hash.new
+        end
+
+        def card( name )
+            @cards[ name ]
         end
 
         # create a new class subclassing YAMTG::Source
-        def source(name, &desc)
-            src = Class.new(Source, &desc)
-            src.name(name)
+        def source( name, &desc )
+            src = Class.new( YAMTG::Source ) {
+                init
+                name(name)
+            }
+            src.class_eval( &desc )
+            @cards[ name ] = src
+            src
         end
 
         # create a new class subclassing YAMTG::Monster
-        def monster(name, attack=nil, defense=nil, &desc)
-            mon = Class.new(Monster) {
-                name(name)
-                attack(attack)
-                defense(defense)
+        def creature( name, power=nil, toughness=nil, &desc )
+            # puts "creature: #{name}, #{power}/#{toughness}"
+            mon = Class.new( Creature ) {
+                init
+                name( name )
+                power( power )
+                toughness( toughness )
             }
-            mon.class_eval(&desc)
+            mon.class_eval( &desc )
+            @cards[ name ] = mon
             mon
         end
 
         # create a new class subclassing YAMTG::Defender
-        def defender(name, attack=nil, defense=nil, &desc)
-            mon = Class.new(Defender) {
-                name(name)
-                attack(attack)
-                defense(defense)
+        def defender( name, power=nil, toughness=nil, &desc )
+            mon = Class.new( Defender ) {
+                init
+                name( name )
+                power( power )
+                toughness( toughness )
             }
-            mon.class_eval(&desc)
+            mon.class_eval( &desc )
+            puts "DEFENDER #{name}: #{mon.new.inspect}"
+            @cards[ name ] = mon
             mon
         end
     end

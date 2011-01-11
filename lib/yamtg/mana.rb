@@ -113,3 +113,12 @@ module YAMTG
     Z = Mana.new(:infinite => "Z")
 
 end
+
+class Fixnum
+    def black
+        YAMTG::Mana.new( :black => self )
+    end
+    def colorless
+        YAMTG::Mana.new( :colorless => self )
+    end
+end
