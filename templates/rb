@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
-#    (C) 2009-2010, Vasiliy Yeremeyev <vayerx@gmail.com>.                   #
+#    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>.                   #
 #                                                                           #
 #    This program is free software; you can redistribute it and/or modify   #
 #    it under the terms of the GNU General Public License as published by   #

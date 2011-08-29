@@ -1,6 +1,6 @@
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
-#    (C) 2009-2010, Vasiliy Yeremeyev <vayerx@gmail.com>,                   #
+#    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>,                   #
 #    (C) 2007, Stefan Rusterholz (rubyoh).                                  #
 #                                                                           #
 #    This program is free software; you can redistribute it and/or modify   #
