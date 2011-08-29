@@ -30,23 +30,38 @@ module YAMTG
                 by.toughness 0
             end
 
-            def power( value ); @power = value; end
-            # def power=( value ); @power = value; end
-            # def power;           @power != Nil ? @power : @@power; end
+            %w[power toughness].each { |name|
+                define_method( name ) { |*val|
+                    return class_variable_get( '@@' + name ) if val.empty?
+                    class_variable_set( '@@' + name, val.first )
+                }
+            }
 
-            def toughness( value ); @toughness = value; end
-            # def toughness= ( value );   @toughness = value; end
-            # def toughness;              @toughness != Nil ? @toughness : @@toughness; end
+            def flying
+                # TODO
+            end
+            def first_strike
+                # TODO
+            end
+            def vigilance
+                # TODO
+            end
+
         end
 
-        def unmodified_power;        @@power;        end
-        def unmodified_toughness;    @@toughness;    end
-
-        def initialize( *params )
-            super( *params )
-            puts "CRATURE(#{self}/#{self.class}) in=#{instance_variables}  cl=#{self.class.class_variables}"
-            puts "#{@name}"
+        def initialize
+            super
+            @power     = unmodified_power ? unmodified_power : 0
+            @toughness = unmodified_toughness ? unmodified_toughness : 0
         end
+
+        %w[power toughness].each { |name|
+            define_method( name ) { |*val|
+                return instance_variable_get( '@' + name ) if val.empty?
+                instance_variable_set( '@' + name, val.first )
+            }
+            define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) }
+        }
 
         def can_attack?
             !tapped?
@@ -54,6 +69,10 @@ module YAMTG
 
         def can_defend?
             !tapped?
+        end
+
+        def inspect
+            "[%s]: %s %d/%d" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness ]
         end
     end
 

@@ -115,10 +115,9 @@ module YAMTG
 end
 
 class Fixnum
-    def black
-        YAMTG::Mana.new( :black => self )
-    end
-    def colorless
-        YAMTG::Mana.new( :colorless => self )
-    end
+    %w[red green blue black white colorless].each { |color|
+        define_method( color ) {
+            YAMTG::Mana.new( color => self )
+        }
+    }
 end

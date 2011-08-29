@@ -24,77 +24,63 @@ require 'yamtg/mana'
 module YAMTG
     class Card
         class << self
+            %w[name types colors description legend].each { |name|
+                define_method( name ) { |*val|
+                    return class_variable_get( '@@' + name ) if val.empty?
+                    class_variable_set( '@@' + name, val.first )
+                }
+            }
+
             def inherited( subclass )
                 subclass.init
             end
 
             def init
-                class_variable_set :@@cost          , Mana.new
-                class_variable_set :@@types         , []
-                class_variable_set :@@colors        , []
-                class_variable_set :@@name          , ""
-                class_variable_set :@@description   , ""
-                class_variable_set :@@legend        , ""
-            end
-
-            attr_accessor :params
-
-            def param( name )
-                define_method( name ) { |*args|
-                    return params[name] if args.empty?
-                    params[name] = args.first
-                }
+                cost          Mana.new
+                types         []
+                colors        []
+                description   ""
+                legend        ""
             end
 
             def cost( *mana )
                 class_variable_set :@@cost, mana.inject( Mana.new ) { |a, b| a + b }
             end
 
-            def name( val )     class_variable_set( :@@name, val );    end
-            def type( *val )    class_variable_set( :@@types, val );   end
-            def legend( val )   class_variable_set( :@@legend, val );  end
+            def type( name )
+                types( class_variable_get( :@@types ) << name )
+            end
 
             def ability( *val )
+                # TODO
+            end
+            def tap ( *val, &descr )
                 # TODO
             end
             def event( *val )
                 # TODO
             end
-
-            def flying
-                # TODO
-            end
-            def first_strike
-                # TODO
-            end
-
-            def description( val )
-                class_variable_set :@@description, val
-            end
         end
 
-        attr_reader :name           # Name of this card
-        attr_reader :cost           # Mana this card costs to play
-        attr_reader :description    # Description of abilities of this card
-        attr_reader :legend         # An entertaining string with a piece of story for the player
-        # attr_reader :tokens         # How many of any token is on this card
-        # attr_reader :zone           # :library, :hand, :field, :graveyard, :out_of_game, :transit_<from>_<to>
+        %w[name cost types colors description legend].each { |name|
+            define_method( name ) { |*val|
+                return instance_variable_get( '@' + name ) if val.empty?
+                instance_variable_set( '@' + name, val.first )
+            }
 
-        attr_accessor   :power, :toughness
+        }
 
         attr_reader     :owner
 
-        def initialize( *params )
-            puts "CARD::CARD(#{self}/#{self.class}) in=#{instance_variables}  cl=#{self.class.class_variables}"
-            # @name        = self.class.class_variables[ :@@name ]
-            @cost        = @@cost
-            @colors      = @@colors || ( @cost.infer_color if @cost )
-            @types       = @@types
-            @description = @@description
-            @legend      = @@legend
+        def initialize
+            @name        = self.class.name
+            @cost        = self.class.cost
+            @colors      = @cost ? @cost.infer_color : self.class.colors
+            @types       = self.class.types
+            @description = self.class.description
+            @legend      = self.class.legend
 
             @tapped       = false
-            # @zone         = nil
             @attachements = []    # cards (enchantments, equipments) attached to this card
             # @tokens       = Hash.new(0)
         end
@@ -121,6 +107,10 @@ module YAMTG
 
         def detach(card)
             @attachements.delete(card)
+        end
+
+        def inspect
+            "[%s]: %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, '') ]
         end
     end
 
