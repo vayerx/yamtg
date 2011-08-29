@@ -1,14 +1,14 @@
 require 'rake'
 require 'rake/testtask'
 
-task :default => [:test_units]
+task :default => [:test]
 
 desc "Run basic tests"
-Dir.chdir( './lib' )
-Rake::TestTask.new( "test_units" ) { |task|
-    task.pattern = '../testsuite/*test.rb'
+
+Rake::TestTask.new( "test" ) { |task|
+    task.pattern = 'testsuite/*_test.rb'
     task.verbose = true
     task.warning = true
-    task.libs << '../lib'
+    task.libs << 'lib'
 }
 

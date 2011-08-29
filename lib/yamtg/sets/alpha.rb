@@ -1,7 +1,6 @@
-#!/usr/bin/env ruby
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
-#    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>.                   #
+#    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>,                   #
 #                                                                           #
 #    This program is free software; you can redistribute it and/or modify   #
 #    it under the terms of the GNU General Public License as published by   #
@@ -19,23 +18,11 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require "yamtg/sets/alpha.rb"
-require "test/unit"
+require 'yamtg/set.rb'
+YAMTG::GlobalSets.instance.add("Alpha")
+include YAMTG
 
-class TestCore < Test::Unit::TestCase
-    include YAMTG
-    def setup
-        @AlphaSet = card_set 'Alpha'
-    end
-
-    def test_simple
-        dead_rat_class = @AlphaSet.card( 'Dead Rat' )
-        assert( dead_rat_class )
-        dead_rat = dead_rat_class.new
-        assert( dead_rat )
-        puts "DEAD RAT: #{dead_rat.inspect}"
-        assert( dead_rat.kind_of? Creature )
-        assert_equal( 'Dead Rat', dead_rat.name )
-    end
-
-end
+require 'yamtg/sets/alpha/black'
+require 'yamtg/sets/alpha/blue'
+require 'yamtg/sets/alpha/red'
+require 'yamtg/sets/alpha/white'

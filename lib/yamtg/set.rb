@@ -46,7 +46,7 @@ module YAMTG
             src
         end
 
-        # create a new class subclassing YAMTG::Monster
+        # create a new class subclassing YAMTG::Creature
         def creature( name, power=nil, toughness=nil, &desc )
             # puts "creature: #{name}, #{power}/#{toughness}"
             mon = Class.new( Creature ) {
@@ -69,10 +69,49 @@ module YAMTG
                 toughness( toughness )
             }
             mon.class_eval( &desc )
-            puts "DEFENDER #{name}: #{mon.new.inspect}"
             @cards[ name ] = mon
             mon
         end
     end
-end
 
+
+    require 'singleton'
+    class GlobalSets
+        include Singleton
+
+        def initialize
+            @default = nil
+            @sets = {}
+        end
+
+        def add( name )
+            @default = @sets[name] = Set.new
+        end
+
+        def get( name )
+            @sets[name]
+        end
+
+        attr_reader :default
+    end
+
+
+    # create a new class subclassing YAMTG::Source
+    def source( name, &desc )
+        GlobalSets.instance.default.source( name, &desc )
+    end
+
+    # create a new class subclassing YAMTG::Creature
+    def creature( name, power=nil, toughness=nil, &desc )
+        GlobalSets.instance.default.creature( name, power, toughness, &desc )
+    end
+
+    # create a new class subclassing YAMTG::Defender
+    def defender( name, power=nil, toughness=nil, &desc )
+        GlobalSets.instance.default.defender( name, power, toughness, &desc )
+    end
+
+    def card_set( name )
+        GlobalSets.instance.get name
+    end
+end

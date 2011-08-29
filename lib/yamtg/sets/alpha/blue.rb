@@ -61,7 +61,7 @@ end
 
 
 creature "Tyrant of the Deep" do
-    cost    3.blue 2.colourless
+    cost    3.blue 2.colorless
     type    "Human"
 
     legend  "The tyrants of the deep were skilled but expensive mercenaries that were

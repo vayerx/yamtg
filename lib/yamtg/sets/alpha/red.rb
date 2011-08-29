@@ -62,10 +62,10 @@ creature "Cave Troll" do
         @anger = 0
     end
     def power
-        @power+@anger*4
+        self.class.superclass.power + @anger*4          # TODO (instance method)
     end
     def toughness
-        @toughness-@anger*1
+        self.class.superclass.toughness - @anger*1      # TODO (instance method)
     end
 end
 
@@ -90,6 +90,6 @@ defender "Stonewall" do
         @anger = 0
     end
     def toughness
-        @toughness+@anger*3
+        self.class.superclass.toughness + @anger*3      # TODO (instance method)
     end
 end
