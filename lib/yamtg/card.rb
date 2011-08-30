@@ -44,11 +44,12 @@ module YAMTG
             end
 
             def cost( *mana )
-                class_variable_set :@@cost, mana.inject( Mana.new ) { |a, b| a + b }
+                return class_variable_get( :@@cost ) if mana.empty?
+                class_variable_set( :@@cost, mana.inject( Mana.new ) { |a, b| a + b } )
             end
 
-            def type( name )
-                types( class_variable_get( :@@types ) << name )
+            def type( *name )
+                types( name )
             end
 
             def ability( *val )
@@ -62,13 +63,8 @@ module YAMTG
             end
         end
 
-        %w[name cost types colors description legend].each { |name|
-            define_method( name ) { |*val|
-                return instance_variable_get( '@' + name ) if val.empty?
-                instance_variable_set( '@' + name, val.first )
-            }
-
-        }
+        attr_reader :name, :description, :legend
+        attr_accessor :cost, :types, :colors
 
         attr_reader     :owner
 

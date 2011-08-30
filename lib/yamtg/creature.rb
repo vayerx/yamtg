@@ -55,11 +55,8 @@ module YAMTG
             @toughness = unmodified_toughness ? unmodified_toughness : 0
         end
 
+        attr_accessor  :power, :toughness
         %w[power toughness].each { |name|
-            define_method( name ) { |*val|
-                return instance_variable_get( '@' + name ) if val.empty?
-                instance_variable_set( '@' + name, val.first )
-            }
             define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) }
         }
 
