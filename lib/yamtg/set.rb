@@ -22,7 +22,7 @@
 require 'yamtg/creature'
 
 module YAMTG
-    class Set
+    class CardSet
 #         def self.load(dir)
 #             # TODO
 #         end
@@ -37,7 +37,7 @@ module YAMTG
 
         # create a new class subclassing YAMTG::Source
         def source( name, &desc )
-            src = Class.new( YAMTG::Source ) {
+            src = Class.new( Source ) {
                 init
                 name(name)
             }
@@ -48,7 +48,6 @@ module YAMTG
 
         # create a new class subclassing YAMTG::Creature
         def creature( name, power=nil, toughness=nil, &desc )
-            # puts "creature: #{name}, #{power}/#{toughness}"
             mon = Class.new( Creature ) {
                 init
                 name( name )
@@ -85,7 +84,7 @@ module YAMTG
         end
 
         def add( name )
-            @default = @sets[name] = Set.new
+            @default = @sets[name] = CardSet.new
         end
 
         def get( name )
