@@ -35,21 +35,21 @@ class TestCore < Test::Unit::TestCase
         assert( card )
         assert( card.kind_of? Creature )
         assert_equal( 'Cloud Phantom', card.name )
+        assert_equal( "Illusion", card.type )
+        assert_equal( :black, card.color )
+        assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )
         assert_equal( 5, card.toughness )
-        puts card.cost.inspect
-        assert_equal( "Illusion", card.type )
-        assert_equal( "black", card.color )
     end
 
     def test_Zephyr
         card = @AlphaSet.card( 'Zephyr of the sky' ).new
         assert_equal( 'Zephyr of the sky', card.name )
+        assert_equal( "Bird", card.type )
+        assert_equal( :blue, card.color )
+        assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )
         assert_equal( 1, card.toughness )
-        puts card.cost.inspect
-        assert_equal( "Bird", card.type )
-        assert_equal( "blue", card.color )
     end
 
 end

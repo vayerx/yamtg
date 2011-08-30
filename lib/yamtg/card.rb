@@ -31,18 +31,6 @@ module YAMTG
                 }
             }
 
-            def inherited( subclass )
-                subclass.init
-            end
-
-            def init
-                cost          Mana.new
-                types         []
-                colors        []
-                description   ""
-                legend        ""
-            end
-
             def cost( *mana )
                 return class_variable_get( :@@cost ) if mana.empty?
                 class_variable_set( :@@cost, mana.inject( Mana.new ) { |a, b| a + b } )
@@ -69,12 +57,12 @@ module YAMTG
         attr_reader     :owner
 
         def initialize
-            @name        = self.class.name
-            @cost        = self.class.cost
-            @colors      = self.class.colors.empty? ? @cost.colors : self.class.colors
-            @types       = self.class.types
-            @description = self.class.description
-            @legend      = self.class.legend
+            @name        = self.class.name rescue ""
+            @cost        = self.class.cost rescue Mana.new
+            @colors      = self.class.colors.empty? ? @cost.colors : self.class.colors rescue []
+            @types       = self.class.types rescue []
+            @description = self.class.description rescue ""
+            @legend      = self.class.legend rescue ""
 
             @tapped       = false
             @attachements = []    # cards (enchantments, equipments) attached to this card

@@ -24,12 +24,6 @@ require 'yamtg/card'
 module YAMTG
     class Creature < Card
         class << self
-            def inherited(by)
-                super
-                by.power 0
-                by.toughness 0
-            end
-
             %w[power toughness].each { |name|
                 define_method( name ) { |*val|
                     return class_variable_get( '@@' + name ) if val.empty?

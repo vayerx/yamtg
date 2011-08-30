@@ -38,36 +38,29 @@ module YAMTG
         # create a new class subclassing YAMTG::Source
         def source( name, &desc )
             src = Class.new( Source ) {
-                init
                 name(name)
+                class_eval( &desc )
             }
-            src.class_eval( &desc )
             @cards[ name ] = src
             src
         end
 
         # create a new class subclassing YAMTG::Creature
-        def creature( name, power=nil, toughness=nil, &desc )
+        def creature( name, &desc )
             mon = Class.new( Creature ) {
-                init
                 name( name )
-                power( power )
-                toughness( toughness )
+                class_eval( &desc )
             }
-            mon.class_eval( &desc )
             @cards[ name ] = mon
             mon
         end
 
         # create a new class subclassing YAMTG::Defender
-        def defender( name, power=nil, toughness=nil, &desc )
+        def defender( name, &desc )
             mon = Class.new( Defender ) {
-                init
                 name( name )
-                power( power )
-                toughness( toughness )
+                class_eval( &desc )
             }
-            mon.class_eval( &desc )
             @cards[ name ] = mon
             mon
         end
@@ -101,13 +94,13 @@ module YAMTG
     end
 
     # create a new class subclassing YAMTG::Creature
-    def creature( name, power=nil, toughness=nil, &desc )
-        GlobalSets.instance.default.creature( name, power, toughness, &desc )
+    def creature( name, &desc )
+        GlobalSets.instance.default.creature( name, &desc )
     end
 
     # create a new class subclassing YAMTG::Defender
-    def defender( name, power=nil, toughness=nil, &desc )
-        GlobalSets.instance.default.defender( name, power, toughness, &desc )
+    def defender( name, &desc )
+        GlobalSets.instance.default.defender( name, &desc )
     end
 
     def card_set( name )
