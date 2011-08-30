@@ -72,7 +72,7 @@ module YAMTG
         end
 
         def inspect
-            "[%s]: %s %d/%d" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness ]
+            "[%s]: %s %d/%d %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color ]
         end
     end
 

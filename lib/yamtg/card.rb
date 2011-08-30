@@ -75,7 +75,7 @@ module YAMTG
         def initialize
             @name        = self.class.name
             @cost        = self.class.cost
-            @colors      = @cost ? @cost.infer_color : self.class.colors
+            @colors      = self.class.colors.empty? ? @cost.colors : self.class.colors
             @types       = self.class.types
             @description = self.class.description
             @legend      = self.class.legend
@@ -89,8 +89,16 @@ module YAMTG
             @class == klass
         end
 
+        def type
+            @types.empty? ? "" : @types.first
+        end
+
         def type?(type)
             @types.include?(type)
+        end
+
+        def color
+            @cost ? @cost.color : :colorless
         end
 
         def color?(color)
@@ -110,7 +118,7 @@ module YAMTG
         end
 
         def inspect
-            "[%s]: %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, '') ]
+            "[%s]: %s %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
         end
     end
 
