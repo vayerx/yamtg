@@ -21,13 +21,12 @@
 
 module YAMTG
     class Mana
-        @colors = [:red, :green, :blue, :black, :white, :colorless].freeze
-        @chars  = {:red => "R", :green=>"G", :blue=>"B", :black=>"K", :white=>"W"}.freeze
+        Colors = [:red, :green, :blue, :black, :white, :colorless]
+        Chars  = {:red => "R", :green=>"G", :blue=>"B", :black=>"K", :white=>"W"}
+
         class << self
-            attr_reader :colors
-            attr_reader :chars
             def self.sort(colors)
-                colors.sort_by { |color| @colors.index(color) }
+                colors.sort_by { |color| Colors.index(color) }
             end
         end
 
@@ -115,7 +114,7 @@ module YAMTG
 end
 
 class Fixnum
-    %w[red green blue black white colorless].each { |color|
+    YAMTG::Mana::Colors.each { |color|
         define_method( color ) {
             YAMTG::Mana.new( color => self )
         }
