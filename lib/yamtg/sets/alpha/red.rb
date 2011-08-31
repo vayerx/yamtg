@@ -47,7 +47,10 @@ creature "Cave Troll" do
     type    "Troll"
     power       2
     toughness   4
+
     description "(R): Cave Troll gains +4/-1 until end of turn"
+
+    attr_accessor :anger
 
     ability :anger, 1.red do
         @anger += 1
@@ -57,15 +60,21 @@ creature "Cave Troll" do
         card.anger -= 1 if card.anger > 0
     end
 
-    attr_accessor :anger
     def initialize
         @anger = 0
+        super
     end
+
     def power
         unmodified_power + @anger*4
     end
+
     def toughness
         unmodified_toughness - @anger*1
+    end
+
+    def pretty_print
+        "#{super}, anger: #{@anger}"
     end
 end
 
@@ -77,6 +86,8 @@ defender "Stonewall" do
     description "(R)(R): Stonewall gains +3/0  until end of turn"
     legend      "The screams were unbearable when the defenders poured boiling oil over the attackers."
 
+    attr_accessor :anger
+
     ability :anger, 2.red do
         @anger += 1
     end
@@ -85,11 +96,16 @@ defender "Stonewall" do
         card.anger -= 1 if card.anger > 0
     end
 
-    attr_accessor :anger
     def initialize
         @anger = 0
+        super
     end
-    def toughness
-        unmodified_toughness + @anger*3
+
+    def power
+        unmodified_power + @anger*3
+    end
+
+    def pretty_print
+        "#{super}, anger: #{@anger}"
     end
 end

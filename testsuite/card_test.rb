@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
 #    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>.                   #
@@ -24,17 +23,20 @@ require "test/unit"
 
 class TestCore < Test::Unit::TestCase
     include YAMTG
-    def setup
-        @AlphaSet = card_set 'Alpha'
-    end
+    AlphaSet = card_set 'Alpha'
 
-    def test_Phantom
-        card_class = @AlphaSet.card( 'Cloud Phantom' )
+    def new_card( name, klass = Card )
+        card_class = AlphaSet.card( name )
         assert( card_class )
         card = card_class.new
         assert( card )
-        assert( card.kind_of? Creature )
-        assert_equal( 'Cloud Phantom', card.name )
+        assert( card.kind_of? klass )
+        assert_equal( name, card.name )
+        card
+    end
+
+    def test_card_Phantom
+        card = new_card 'Cloud Phantom', Creature
         assert_equal( "Illusion", card.type )
         assert_equal( :black, card.color )
         assert_equal( 3, card.cost.total )
@@ -42,14 +44,35 @@ class TestCore < Test::Unit::TestCase
         assert_equal( 5, card.toughness )
     end
 
-    def test_Zephyr
-        card = @AlphaSet.card( 'Zephyr of the sky' ).new
-        assert_equal( 'Zephyr of the sky', card.name )
+    # independent attributes (compared with Cloud Phantom)
+    def test_card_Zephyr
+        card = new_card 'Zephyr of the sky', Creature
         assert_equal( "Bird", card.type )
         assert_equal( :blue, card.color )
         assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )
         assert_equal( 1, card.toughness )
+        assert( card.can_attack? )
     end
 
+    # only instance variables should be modified on card manipulation
+    def test_card_modification
+        card1 = new_card 'Zephyr of the sky'
+        assert_equal( 3, card1.power )
+        card1.power = 1;
+        assert_equal( 1, card1.power )
+
+        card2 = new_card 'Zephyr of the sky'
+        assert_equal( 3, card2.power )
+    end
+
+    # "dynamic" attributes
+    def test_casd_Stonewall
+        card = new_card 'Stonewall', Defender
+        assert( !card.can_attack? )
+        assert_equal( 0, card.power )       # initial power (isn't defined in spec)
+        assert_equal( 0, card.anger )       # initial anger (card-specific)
+        card.anger = 1
+        assert_equal( 3, card.power )       # modified power
+    end
 end

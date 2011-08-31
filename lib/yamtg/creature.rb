@@ -45,13 +45,13 @@ module YAMTG
 
         def initialize
             super
-            @power     = unmodified_power ? unmodified_power : 0
-            @toughness = unmodified_toughness ? unmodified_toughness : 0
+            @power     = unmodified_power rescue 0
+            @toughness = unmodified_toughness rescue 0
         end
 
         attr_accessor  :power, :toughness
         %w[power toughness].each { |name|
-            define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) }
+            define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) rescue 0 }
         }
 
         def can_attack?
