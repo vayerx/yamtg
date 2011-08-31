@@ -73,7 +73,7 @@ creature "Cave Troll" do
         unmodified_toughness - @anger*1
     end
 
-    def pretty_print
+    def inspect
         "#{super}, anger: #{@anger}"
     end
 end
@@ -105,7 +105,7 @@ defender "Stonewall" do
         unmodified_power + @anger*3
     end
 
-    def pretty_print
+    def inspect
         "#{super}, anger: #{@anger}"
     end
 end

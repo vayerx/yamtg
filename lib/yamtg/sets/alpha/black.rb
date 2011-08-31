@@ -23,9 +23,9 @@ source "Swamp" do
     type        "Land"
     description "(Tap): Generate (K)"
 
-#     tap do |arena, card|
-#         card.owner.add_mana(1.black)
-#     end
+    tap do |arena, card|
+        card.owner.add_mana(1.black)
+    end
 end
 
 defender "Tarpit" do

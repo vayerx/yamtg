@@ -11,4 +11,3 @@ Rake::TestTask.new( "test" ) { |task|
     task.warning = true
     task.libs << 'lib'
 }
-

@@ -62,8 +62,12 @@ module YAMTG
             !tapped?
         end
 
+        def permanent?
+            true
+        end
+
         def inspect
-            "[%s]: %s %d/%d %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color ]
+            "[%s]: %s %d/%d, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color ]
         end
     end
 

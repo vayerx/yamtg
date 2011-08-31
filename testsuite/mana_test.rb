@@ -1,4 +1,3 @@
-#!/usr/bin/env ruby
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
 #    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>.                   #

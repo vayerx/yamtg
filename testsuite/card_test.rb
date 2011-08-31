@@ -50,6 +50,8 @@ class TestCore < Test::Unit::TestCase
     def test_card_Phantom
         card = new_card 'Cloud Phantom', Creature
         assert_equal( "Illusion", card.type )
+        assert( card.type? "Illusion" )
+        assert( !card.type?( "Not Illusion" ) )
         assert_equal( :black, card.color )
         assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )

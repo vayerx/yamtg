@@ -18,54 +18,31 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require 'yamtg/mana'
-require 'yamtg/deck'
-require 'yamtg/stack'
+require 'yamtg/set'
+require 'enumerator'
 
 module YAMTG
-    class Player
-        attr_reader   :name
-        attr_accessor :health
-        attr_accessor :handsize
-        attr_reader   :hand
-        attr_reader   :graveyard
-        attr_accessor :mana
+    class Deck < Array
+        def initialize( cards = [], autoload = :load )
+            case cards
+            when Hash
+                cards.each { |card, amount| fill( card, length, amount ) }
+            when Array
+                cards.flatten.each_slice( 2 ) { |v| fill( v.first, length, v.last ) if v.size == 2 }
+            else
+                raise ArgumentError, "Deck: can't handle #{cards.class}"
+            end
 
-        def initialize( name, health = 20, handsize = 7 )
-            @name      = name.freeze
-            @health    = health
-            @handsize  = handsize
-            @hand      = []
-            @deck      = Deck.new
-            @graveyard = Stack.new
-            @mana      = Mana.new
+            load if autoload == :load
         end
 
-        def deck( *var )
-            return @deck if var.empty?
-            raise ArgumentError, "Invalid args amount #{var.size}" if var.first.is_a? Deck and var.size != 1
-            @deck = var.first.is_a?( Deck ) ? var.first : Deck.new( var.first )
-            @deck.each {|v| v.owner = self }
-        end
-
-        def cards_left?
-            not @deck.empty?
-        end
-
-        def dead?
-            @health <= 0
+        def load
+            map! { |card| get_card card if card.is_a? String }
         end
 
         def draw( amount = 1 )
-            @hand.concat @deck.draw( amount )
-        end
-
-        def discard( index_or_range = 0 )
-            @hand.slice! index_or_range
-        end
-
-        def add_mana( mana )
-            @mana += mana
+            raise RuntimeError, "Not enough cards in deck" if size < amount
+            shift amount
         end
     end
 end

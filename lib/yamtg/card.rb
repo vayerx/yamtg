@@ -54,7 +54,7 @@ module YAMTG
         attr_reader :name, :description, :legend
         attr_accessor :cost, :types, :colors
 
-        attr_reader     :owner
+        attr_accessor   :owner
 
         def initialize
             @name        = self.class.name rescue ""
@@ -66,11 +66,8 @@ module YAMTG
 
             @tapped       = false
             @attachements = []    # cards (enchantments, equipments) attached to this card
-            # @tokens       = Hash.new(0)
-        end
 
-        def class?(klass)
-            @class == klass
+            @owner        = nil
         end
 
         def type
@@ -102,10 +99,19 @@ module YAMTG
         end
 
         def inspect
-            "[%s]: %s %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
+            "[%s]: %s, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
+        end
+    end
+
+    class Land < Card
+        def permanent?
+            true
         end
     end
 
     class Source < Card
+        def permanent?
+            false
+        end
     end
 end

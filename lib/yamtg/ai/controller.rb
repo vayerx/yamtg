@@ -18,54 +18,13 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require 'yamtg/mana'
-require 'yamtg/deck'
-require 'yamtg/stack'
+require 'yamtg/controller'
 
 module YAMTG
-    class Player
-        attr_reader   :name
-        attr_accessor :health
-        attr_accessor :handsize
-        attr_reader   :hand
-        attr_reader   :graveyard
-        attr_accessor :mana
-
-        def initialize( name, health = 20, handsize = 7 )
-            @name      = name.freeze
-            @health    = health
-            @handsize  = handsize
-            @hand      = []
-            @deck      = Deck.new
-            @graveyard = Stack.new
-            @mana      = Mana.new
-        end
-
-        def deck( *var )
-            return @deck if var.empty?
-            raise ArgumentError, "Invalid args amount #{var.size}" if var.first.is_a? Deck and var.size != 1
-            @deck = var.first.is_a?( Deck ) ? var.first : Deck.new( var.first )
-            @deck.each {|v| v.owner = self }
-        end
-
-        def cards_left?
-            not @deck.empty?
-        end
-
-        def dead?
-            @health <= 0
-        end
-
-        def draw( amount = 1 )
-            @hand.concat @deck.draw( amount )
-        end
-
-        def discard( index_or_range = 0 )
-            @hand.slice! index_or_range
-        end
-
-        def add_mana( mana )
-            @mana += mana
+    class AiController < Controller
+        def take_land
+            land = hand.index { |card| card.type? "Land" }
+            hand.slice! land if land
         end
     end
 end
