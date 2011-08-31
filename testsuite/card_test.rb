@@ -35,6 +35,18 @@ class TestCore < Test::Unit::TestCase
         card
     end
 
+    def test_card_invalid
+        assert_raise( IndexError ) { AlphaSet.card( 'invalid card name' ) }
+    end
+
+    def test_card_autofetcher
+        assert_nothing_raised do
+            YAMTG::get_card 'Cloud Phantom'
+            YAMTG::get_card 'Cloud Phantom', 'Alpha'
+        end
+        assert_raise( IndexError ) { YAMTG::get_card 'Cloud Phantom', 'invalid set name' }
+    end
+
     def test_card_Phantom
         card = new_card 'Cloud Phantom', Creature
         assert_equal( "Illusion", card.type )

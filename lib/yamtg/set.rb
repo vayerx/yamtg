@@ -32,7 +32,7 @@ module YAMTG
         end
 
         def card( name )
-            @cards[ name ]
+            @cards.fetch name
         end
 
         # create a new class subclassing YAMTG::Source
@@ -81,10 +81,10 @@ module YAMTG
         end
 
         def get( name )
-            @sets[name]
+            @sets.fetch name
         end
 
-        attr_reader :default
+        attr_reader :default, :sets
     end
 
 
@@ -105,5 +105,20 @@ module YAMTG
 
     def card_set( name )
         GlobalSets.instance.get name
+    end
+
+    def get_card_class( card_name, set_name = nil )
+        return card_set( set_name ).card( card_name ) if set_name
+        GlobalSets.instance.sets.each_value do |set|
+            begin
+                return set.card( card_name )
+            rescue IndexError
+            end
+        end
+        raise IndexError, "Card #{card_name} not found"
+    end
+
+    def get_card( card_name, set_name = nil )
+        get_card_class( card_name, set_name ).new
     end
 end
