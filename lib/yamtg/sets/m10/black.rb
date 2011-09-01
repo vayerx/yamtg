@@ -63,5 +63,5 @@ end
 
 source "Duress" do
     cost        1.black
-    description "Target oppenent releals his or her hand..."
+    description "Target oppenent reveals his or her hand..."
 end

@@ -22,7 +22,7 @@
 require 'yamtg/card'
 
 module YAMTG
-    class Creature < Card
+    class Creature < Permanent
         class << self
             %w[power toughness].each { |name|
                 define_method( name ) { |*val|
@@ -62,14 +62,12 @@ module YAMTG
             !tapped?
         end
 
-        def permanent?
-            true
-        end
-
         def inspect
-            "[%s]: %s %d/%d, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color ]
+            "[%s]: %s %d/%d, %s, %s" % [
+                name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color, tapped? ? "tapped" : "untapped" ]
         end
     end
+
 
     class Defender < Creature
         def can_attack?

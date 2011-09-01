@@ -52,6 +52,7 @@ class TestCore < Test::Unit::TestCase
         assert_equal( "Illusion", card.type )
         assert( card.type? "Illusion" )
         assert( !card.type?( "Not Illusion" ) )
+        assert( card.permanent? )
         assert_equal( :black, card.color )
         assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )
@@ -67,6 +68,19 @@ class TestCore < Test::Unit::TestCase
         assert_equal( 3, card.power )
         assert_equal( 1, card.toughness )
         assert( card.can_attack? )
+    end
+
+    source "Duress" do
+        cost        1.black
+        description "Target oppenent reveals his or her hand..."
+    end
+
+    # Source
+    def test_card_Duress
+        card = new_card 'Duress', Source
+        assert( !card.permanent? )
+        assert_equal( :black, card.color )
+        assert_equal( 1, card.cost.total )
     end
 
     # only instance variables should be modified on card manipulation

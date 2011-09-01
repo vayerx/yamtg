@@ -35,6 +35,16 @@ module YAMTG
             @cards.fetch name
         end
 
+        # create a new class subclassing YAMTG::Permanent
+        def permanent( name, &desc )
+            perm = Class.new( Permanent ) {
+                name(name)
+            class_eval( &desc )
+            }
+            @cards[ name ] = perm
+            perm
+        end
+
         # create a new class subclassing YAMTG::Source
         def source( name, &desc )
             src = Class.new( Source ) {
@@ -87,6 +97,11 @@ module YAMTG
         attr_reader :default, :sets
     end
 
+
+    # create a new class subclassing YAMTG::Permanent
+    def permanent( name, &desc )
+        GlobalSets.instance.default.permanent( name, &desc )
+    end
 
     # create a new class subclassing YAMTG::Source
     def source( name, &desc )

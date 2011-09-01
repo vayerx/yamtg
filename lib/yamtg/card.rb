@@ -43,7 +43,7 @@ module YAMTG
             def ability( *val )
                 # TODO
             end
-            def tap ( *val, &descr )
+            def tap( *val, &descr )
                 # TODO
             end
             def event( *val )
@@ -64,9 +64,6 @@ module YAMTG
             @description = self.class.description rescue ""
             @legend      = self.class.legend rescue ""
 
-            @tapped       = false
-            @attachements = []    # cards (enchantments, equipments) attached to this card
-
             @owner        = nil
         end
 
@@ -86,6 +83,19 @@ module YAMTG
             @colors.include?(color)
         end
 
+        def permanent?
+            is_a? Permanent
+        end
+    end
+
+
+    class Permanent < Card
+        def initialize
+            @tapped       = false
+            @attachements = []    # cards (enchantments, equipments) attached to this card
+            super
+        end
+
         def tapped?
             @tapped
         end
@@ -99,19 +109,12 @@ module YAMTG
         end
 
         def inspect
-            "[%s]: %s, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
+            "[%s]: %s, %s, %s" % [
+                name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color, tapped? ? "tapped" : "untapped" ]
         end
     end
 
-    class Land < Card
-        def permanent?
-            true
-        end
-    end
 
     class Source < Card
-        def permanent?
-            false
-        end
     end
 end

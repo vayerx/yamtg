@@ -19,7 +19,7 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-source "Mountain" do
+permanent "Mountain" do
     type        "Land"
     description "(Tap): Generate (R)"
 
