@@ -100,6 +100,16 @@ module YAMTG
             @tapped
         end
 
+        def tap
+            raise RuntimeError, "Card is already tapped" if tapped?
+            @tapped = true
+        end
+
+        def untap
+            raise RuntimeError, "Card is already untapped" if not tapped?
+            @tapped = false
+        end
+
         def attach(card)
             @attachements << card
         end

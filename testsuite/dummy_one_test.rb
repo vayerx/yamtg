@@ -18,75 +18,35 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-module YAMTG
-    # Remote-side player operating via Manipulator
-    class Controller
-        attr_accessor :actor    # Manipulator
+require 'yamtg/sets/alpha'
+require 'yamtg/ai/dummy_one'
+require 'yamtg/game'
+require 'test/unit'
+require 'pp'
 
-        def initialize(actor = nil)
-            @actor = actor
-        end
+class TestAiDummyOne< Test::Unit::TestCase
+    include YAMTG
 
-        #
-        # Beginning Phase: untap, upkeep, and draw
-        #
-        def on_untap_step
-            battlefield( :self ) { |card| card.untap if card.permanent? and card.tapped? }
-        end
+    def setup
+        @game = Game.new
+        @player1 = Player.new 'Player1'
+        @game.add_player @player1, AiDummyOne.new
+    end
 
-        def on_upkeep_step
-        end
-        def on_draw_step
-            @actor.draw_card
-        end
+    def test_basics
+        @player1.deck( [ 'Mountain', 2, 'Dwarven Soldier', 4, 'Mountain', 2, 'Cave Troll', 4 ] )
+        @game.start_game :dont_suffle
+        assert( @player1.battlefield.empty? )
 
-        #
-        # Main Phase
-        #
-        def on_main_phase
-        end
+        # playing land
+        @game.next_round
+        assert( !@player1.battlefield.empty? )
+        assert_equal( 'Mountain', @player1.battlefield.first.name )
 
-        #
-        # Combat Phase
-        #
-        def on_beginning_of_combat_step
-        end
-        def on_declare_attackers_step
-        end
-        def on_declare_blockers_step
-        end
-        def on_combat_damage_step
-        end
-        def on_end_of_combat_step
-        end
-
-        #
-        # Ending Phase
-        #
-        def on_end_step
-        end
-
-        # Choose cards to discard to graveyard
-        def on_discard_cards( amount )
-            0...amount
-        end
-
-        # Choose cards to exile
-        def on_exile_cards( amount )
-            0...amount
-        end
-
-    protected   # shortcuts
-        def handsize
-            @actor.handsize
-        end
-
-        def battlefield( name = :all, &block )
-            @actor.battlefield( name, &block )
-        end
-
-        def mana
-            @actor.mana
-        end
+        # untapping
+        @player1.battlefield.first.tap
+        assert( @player1.battlefield.first.tapped? )
+        @game.next_round
+        assert( !@player1.battlefield.first.tapped? )
     end
 end
