@@ -19,28 +19,20 @@
 #############################################################################
 
 module YAMTG
+    # Remote-side player operating via Manipulator
     class Controller
         attr_accessor :actor    # Manipulator
 
-        def initialize
-            @actor = nil
+        def initialize(actor = nil)
+            @actor = actor
         end
 
-    protected
-        def hand
-            @actor.player.hand      # I wish I could return constant reference
-        end
-
-        def handsize
-            @actor.player.handsize
-        end
-
-    public
         #
         # Beginning Phase: untap, upkeep, and draw
         #
         def on_untap_step
         end
+
         def on_upkeep_step
         end
         def on_draw_step
@@ -72,8 +64,28 @@ module YAMTG
         #
         def on_end_step
         end
-        def on_cleanup_step
-            @actor.discard_card(0...(@hand.size - @handsize)) if hand.size > handsize
+
+        # Choose cards to discard to graveyard
+        def on_discard_cards( amount )
+            0...amount
+        end
+
+        # Choose cards to exile
+        def on_exile_cards( amount )
+            0...amount
+        end
+
+    protected   # shortcuts
+        def handsize
+            @actor.handsize
+        end
+
+        def battlefield( name = :all, &block )
+            @actor.battlefield( name, &block )
+        end
+
+        def mana
+            @actor.mana
         end
     end
 end

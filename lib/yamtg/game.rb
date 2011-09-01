@@ -47,7 +47,7 @@ module YAMTG
 
         def next_round
             raise RuntimeError, "Game over" if game_over?
-            do_player_step active_player
+            do_player_step( *active_player )
             next_player
         end
 
@@ -59,7 +59,7 @@ module YAMTG
     private
         def active_player       # TODO rename/split - return controller
             raise RuntimeError, "No active player -- game hasn't started" if @active_index == nil
-            @controllers.fetch @active_index
+            [@controllers.fetch( @active_index ), @players.fetch( @active_index )]
         end
 
         def next_player
@@ -70,18 +70,28 @@ module YAMTG
             true
         end
 
-        def do_player_step( player )
-            player.on_untap_step
-            player.on_upkeep_step
-            player.on_draw_step
-            player.on_main_phase
-            player.on_beginning_of_combat_step
-            player.on_declare_attackers_step
-            player.on_declare_blockers_step
-            player.on_combat_damage_step
-            player.on_end_of_combat_step
-            player.on_end_step
-            player.on_cleanup_step
+        def do_player_step( controller, player )
+            controller.on_untap_step
+            controller.on_upkeep_step
+            controller.on_draw_step
+
+            controller.on_main_phase
+
+            controller.on_beginning_of_combat_step
+            controller.on_declare_attackers_step
+            controller.on_declare_blockers_step
+            controller.on_combat_damage_step
+            controller.on_end_of_combat_step
+
+            controller.on_end_step
+
+            # cleanup step
+            if player.hand.size > player.handsize
+                excessive = player.hand.size - player.handsize
+                range = controller.on_discard_cards excessive
+                raise RuntimeError, "Discarded #{range.count} cards instead of #{excessive}" if range.count != excessive
+                player.discard range
+            end
         end
     end
 end

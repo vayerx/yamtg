@@ -27,18 +27,20 @@ module YAMTG
         attr_reader   :name
         attr_accessor :health
         attr_accessor :handsize
-        attr_reader   :hand
-        attr_reader   :graveyard
+        attr_accessor :hand
+        attr_accessor :battlefield
+        attr_accessor :graveyard
         attr_accessor :mana
 
         def initialize( name, health = 20, handsize = 7 )
-            @name      = name.freeze
-            @health    = health
-            @handsize  = handsize
-            @hand      = []
-            @deck      = Deck.new
-            @graveyard = Stack.new
-            @mana      = Mana.new
+            @name       = name.freeze
+            @health     = health
+            @handsize   = handsize
+            @hand       = []
+            @battlefield= []
+            @deck       = Deck.new
+            @graveyard  = Stack.new
+            @mana       = Mana.new
         end
 
         def deck( *var )
@@ -61,7 +63,9 @@ module YAMTG
         end
 
         def discard( index_or_range = 0 )
-            @hand.slice! index_or_range
+            discarded = @hand.slice! index_or_range
+            @graveyard.concat discarded
+            discarded
         end
 
         def add_mana( mana )

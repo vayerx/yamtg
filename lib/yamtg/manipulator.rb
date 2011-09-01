@@ -35,14 +35,42 @@ module YAMTG
             @player.discard index_or_range
         end
 
-        def play_card( card )
+        def play_card( index )
             # TODO triggers, actions, etc.
+            card = @player.hand.slice! index
+            raise IndexError, "Invalid card index #{index}" if not card
 
-            if card.permanent?                  # TODO card-dependent logic!
-                @player.battlefield << card
-            else
-                @player.graveyard << card
+            # TODO card-dependent logic!
+            (card.permanent? ? @player.battlefield : @player.graveyard) << card
+
+            # pp @player
+        end
+
+        def find_card_in_hand( &block )
+            @player.hand.index( &block )
+        end
+
+        def player_name
+            @player.name
+        end
+
+        def handsize
+            @player.handsize
+        end
+
+        def battlefield( name = :all )
+            name = player_name if name == :self
+            @game.players.each do |player|
+                if name == :all
+                    player.battlefield.each { |card| yield card, player.name }
+                else # players amount is small
+                    player.battlefield.each { |card| yield card } if player.name == name
+                end
             end
+        end
+
+        def mana
+            @player.mana
         end
     end
 end

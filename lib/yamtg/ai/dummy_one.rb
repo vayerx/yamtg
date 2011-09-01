@@ -26,8 +26,10 @@ module YAMTG
         # Main Phase
         #
         def on_main_phase
-            land = take_land
-            actor.play_card land if land
+            play_some_land
+
+            avail_mana = count_available_mana
+            puts "avail mana: #{avail_mana}"
         end
     end
 end

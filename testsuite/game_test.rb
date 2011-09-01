@@ -19,21 +19,29 @@
 #############################################################################
 
 require 'yamtg/sets/alpha'
-require 'yamtg/ai/dummy_one'
+require 'yamtg/controller'
 require 'yamtg/game'
 require 'test/unit'
 require 'pp'
 
 class TestGame < Test::Unit::TestCase
     include YAMTG
-    def test_simple
-        game = Game.new
 
-        player1 = Player.new 'Player1'
-        player1.deck( [ "Mountain", 2, 'Dwarven Soldier', 4, "Mountain", 2, 'Cave Troll', 4 ] )
-        game.add_player player1, AiDummyOne.new
+    def setup
+        @game = Game.new
+    end
 
-        game.start_game :dont_suffle
-        game.next_round
+    def test_Discard_excessive_cards
+        player = Player.new 'Player'
+        player.deck( [ 'Dwarven Soldier', 1, 'Cave Troll', 4, 'Mountain Ogre', 4 ] )
+        @game.add_player player, Controller.new
+
+        @game.start_game
+        assert( player.graveyard.empty? )
+        @game.next_round     # 7 cards
+        assert( player.graveyard.empty? )
+        @game.next_round     # 8 cards - 1 card should be discarded
+        assert( !player.graveyard.empty? )
+        assert_equal( 'Dwarven Soldier', player.graveyard.first.name )
     end
 end

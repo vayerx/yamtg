@@ -18,8 +18,8 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require "yamtg/sets/alpha.rb"
-require "test/unit"
+require 'yamtg/sets/alpha.rb'
+require 'test/unit'
 
 class TestCore < Test::Unit::TestCase
     include YAMTG
@@ -35,11 +35,11 @@ class TestCore < Test::Unit::TestCase
         card
     end
 
-    def test_card_invalid
+    def test_invalid
         assert_raise( IndexError ) { AlphaSet.card( 'invalid card name' ) }
     end
 
-    def test_card_autofetcher
+    def test_autofetcher
         assert_nothing_raised do
             YAMTG::get_card 'Cloud Phantom'
             YAMTG::get_card 'Cloud Phantom', 'Alpha'
@@ -47,11 +47,11 @@ class TestCore < Test::Unit::TestCase
         assert_raise( IndexError ) { YAMTG::get_card 'Cloud Phantom', 'invalid set name' }
     end
 
-    def test_card_Phantom
+    def test_Phantom
         card = new_card 'Cloud Phantom', Creature
-        assert_equal( "Illusion", card.type )
-        assert( card.type? "Illusion" )
-        assert( !card.type?( "Not Illusion" ) )
+        assert_equal( 'Illusion', card.type )
+        assert( card.type? 'Illusion' )
+        assert( !card.type?( 'Not Illusion' ) )
         assert( card.permanent? )
         assert_equal( :black, card.color )
         assert_equal( 3, card.cost.total )
@@ -60,9 +60,9 @@ class TestCore < Test::Unit::TestCase
     end
 
     # independent attributes (compared with Cloud Phantom)
-    def test_card_Zephyr
+    def test_Zephyr
         card = new_card 'Zephyr of the sky', Creature
-        assert_equal( "Bird", card.type )
+        assert_equal( 'Bird', card.type )
         assert_equal( :blue, card.color )
         assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )
@@ -70,13 +70,13 @@ class TestCore < Test::Unit::TestCase
         assert( card.can_attack? )
     end
 
-    source "Duress" do
+    source 'Duress' do
         cost        1.black
-        description "Target oppenent reveals his or her hand..."
+        description 'Target oppenent reveals his or her hand...'
     end
 
     # Source
-    def test_card_Duress
+    def test_Duress
         card = new_card 'Duress', Source
         assert( !card.permanent? )
         assert_equal( :black, card.color )
@@ -84,7 +84,7 @@ class TestCore < Test::Unit::TestCase
     end
 
     # only instance variables should be modified on card manipulation
-    def test_card_modification
+    def test_modification
         card1 = new_card 'Zephyr of the sky'
         assert_equal( 3, card1.power )
         card1.power = 1;
