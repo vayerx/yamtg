@@ -19,13 +19,13 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
+require 'set'
+
 module YAMTG
 
-    require 'set'
-
     class Mana
-        Colors = [:red, :green, :blue, :black, :white, :colorless]
-        Chars  = {:red => "R", :green=>"G", :blue=>"B", :black=>"K", :white=>"W"}
+        Colors = [ :red, :green, :blue, :black, :white, :colorless ]
+        Chars  = { :red => "R", :green => "G", :blue => "B", :black => "K", :white => "W" }
 
         class << self
             def self.sort(colors)
@@ -33,12 +33,12 @@ module YAMTG
             end
         end
 
-        attr_reader :amount
+        attr_reader :amount     # color pairs
         attr_reader :total      # total amount
-        attr_reader :colors
+        attr_reader :colors     # colors set (TODO excessive value)
 
         def initialize(mana={})
-            @amount = Hash[*mana.map { |k,v| Array === k ? [Mana.sort(k), v] : [k, v]}.flatten]
+            @amount = Hash[*mana.map { |k, v| Array === k ? [Mana.sort(k), v] : [k, v] }.flatten]
             @amount.reject! { |k,v| k != :infinite && v.zero? }
             @amount.freeze
             @total  = @amount.values.inject(0) { |a,b| String === b ? a : a+b }
@@ -51,24 +51,53 @@ module YAMTG
         end
 
         def +(other)
-            Mana.new(@amount.merge(other.amount) { |key, a,b| a+b })
+            Mana.new(@amount.merge(other.amount) { |key, a, b| a+b })
+        end
+
+        def -(other)    # TODO optimize
+            raise RuntimeError, "Don't know how to substract #{other.class} from Mana" if !other.is_a? Mana
+            new = @amount.dup
+            sub = other.amount.dup
+            # handle colorless
+            if colorless = sub[:colorless]
+                # substract color-full
+                new.delete_if do |color, amount|
+                    if color != :colorless
+                        colorless -= (value = [colorless, amount].min)
+                        (new[color] -= value) == 0
+                    end
+                end
+                # substract colorless
+                new.delete_if do |color, amount|
+                    colorless -= (value = [colorless, amount].min)
+                    (new[color] -= value) == 0
+                end
+                colorless != 0 ? sub[:colorless] = colorless : sub.delete( :colorless )
+            end
+            # exact matching
+            sub.each do |color, amount|
+                value = new[color]
+                raise RuntimeError, "Not enough #{color} mana (#{value} < #{amount})" if not value or value < amount
+                value > amount ? new[color] -= amount : new.delete( color )
+            end
+            Mana.new(new)
+        end
+
+        def <(other)
+            (!(self - other).zero?) rescue true   # TODO optimize
+        end
+
+        def >(other)
+            other < self
+        end
+
+        def ==(other)
+            return false if other.amount != @amount or other.total != @total
+            other.amount.each { |color, amount| return false if @amount[color] == nil or @amount[color] != amount }
         end
 
         def color
             @colors.size == 1 ? @colors.first : :multicolor
-        end
-
-        # FIXME
-        # implement colorless, multicolored and infinite
-        def -(other)
-            new = @amount.dup
-            sub = other.amount.dup
-            Mana.colors.each { |key|
-                val      = (new[key]||0) - (sub.delete(key)||0)
-                new[key] = val
-                new.delete(key) if val.zero?
-            }
-            Mana.new(new)
         end
 
         # returns the colors that are negative if there are any

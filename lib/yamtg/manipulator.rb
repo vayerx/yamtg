@@ -40,6 +40,10 @@ module YAMTG
             card = @player.hand.slice! index
             raise IndexError, "Invalid card index #{index}" if not card
 
+            # TODO card-specific costs
+            raise RuntimeError, "Not enough mana to play #{card.inspect}" if @player.mana < card.cost
+            @player.mana -= card.cost
+
             # TODO card-dependent logic!
             (card.permanent? ? @player.battlefield : @player.graveyard) << card
 
