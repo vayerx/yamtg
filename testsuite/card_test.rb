@@ -115,7 +115,7 @@ class TestCore < Test::Unit::TestCase
     end
 
     # "dynamic" attributes
-    def test_casd_Stonewall
+    def test_Stonewall
         card = new_card 'Stonewall', Defender
         assert( !card.can_attack? )
         assert_equal( 0, card.power )       # initial power (isn't defined in spec)

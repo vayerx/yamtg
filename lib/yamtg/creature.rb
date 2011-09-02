@@ -51,7 +51,13 @@ module YAMTG
             !tapped?
         end
 
-        def can_defend?
+        def can_block?(card = nil)
+            if card
+                # TODO {island,...}walk should be handled somewhere (battlefield required)
+                return false if card.has? :unblockable
+                return false if card.has? :flying and !(has? :flying or has? :reach)
+                return false if card.has? :fear and not colors.include? :black
+            end
             !tapped?
         end
 

@@ -27,8 +27,20 @@ require 'pp'
 class TestGame < Test::Unit::TestCase
     include YAMTG
 
+    creature 'Ezuri\'s Archers' do
+        cost        1.green
+        power       1
+        toughness   2
+        reach
+    end
+
     def setup
         @game = Game.new
+
+        @gargoyle = get_card 'Gargoyle'         # 2/2, flying
+        @pegasus  = get_card 'Pegasus'          # 2/2, flying, first strike
+        @archers  = get_card 'Ezuri\'s Archers' # 1/2, reach
+        @phantom  = get_card 'Cloud Phantom'    # 3/5
     end
 
     def test_Discard_excessive_cards
@@ -43,5 +55,22 @@ class TestGame < Test::Unit::TestCase
         @game.next_round     # 8 cards - 1 card should be discarded
         assert( !player.graveyard.empty? )
         assert_equal( 'Dwarven Soldier', player.graveyard.first.name )
+    end
+
+    def test_Basic_blocking_abilities
+        assert( @gargoyle.can_attack? && @pegasus.can_attack? && @phantom.can_attack? && @archers.can_attack? )
+        assert( @gargoyle.can_block? && @pegasus.can_block? && @phantom.can_block? && @archers.can_block? )
+        assert( @gargoyle.can_block? @pegasus )     # flying - flying
+        assert( @gargoyle.can_block? @phantom )     # flying - basic
+        assert( !@phantom.can_block?(@gargoyle) )   # basic - flying
+        assert( @phantom.can_block? @archers )      # basic - basic
+
+        @phantom.tap
+        assert( !@phantom.can_block?(@archers) )    # basic tapped - basic
+        assert( !@phantom.can_attack? && !@phantom.can_block? )
+    end
+
+    def test_Basic_damage_abilities
+        # TODO
     end
 end
