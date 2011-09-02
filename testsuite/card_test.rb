@@ -20,6 +20,7 @@
 
 require 'yamtg/sets/alpha.rb'
 require 'test/unit'
+require 'pp'
 
 if not defined? KeyError    # ruby 1.8
     class KeyError < StandardError
@@ -85,6 +86,8 @@ class TestCore < Test::Unit::TestCase
         assert_equal( 3, card.power )
         assert_equal( 1, card.toughness )
         assert( card.can_attack? )
+        assert( card.has? :vigilance )
+        assert( !card.has?( :first_strike ) )
     end
 
     source 'Duress' do
