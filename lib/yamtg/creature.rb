@@ -31,16 +31,9 @@ module YAMTG
                 }
             }
 
-            def flying
-                # TODO
-            end
-            def first_strike
-                # TODO
-            end
-            def vigilance
-                # TODO
-            end
-
+            %w[fear first_strike flying reach vigilance].each { |name|
+                define_method( name ) { ability name.to_sym }
+            }
         end
 
         def initialize

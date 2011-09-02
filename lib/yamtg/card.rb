@@ -24,7 +24,7 @@ require 'yamtg/mana'
 module YAMTG
     class Card
         class << self
-            %w[name types colors description legend].each { |name|
+            %w[name types colors description legend abilities].each { |name|
                 define_method( name ) { |*val|
                     return class_variable_get( '@@' + name ) if val.empty?
                     class_variable_set( '@@' + name, val.first )
@@ -40,8 +40,9 @@ module YAMTG
                 types( name )
             end
 
-            def ability( *val )
-                # TODO
+            def ability( name, *val )
+                ab = abilities rescue abilities({})
+                ab[name] = val                          # TODO custom abilities (name, *cost, &action)
             end
             def tap( *val, &descr )
                 # TODO
@@ -58,7 +59,7 @@ module YAMTG
         attr_writer     :owner
 
         attr_reader :name, :description, :legend
-        attr_accessor :cost, :types, :colors
+        attr_accessor :cost, :types, :colors, :abilities
 
         def initialize
             @name        = self.class.name rescue ""
@@ -67,8 +68,9 @@ module YAMTG
             @types       = self.class.types rescue []
             @description = self.class.description rescue ""
             @legend      = self.class.legend rescue ""
+            @abilities   = self.class.abilities rescue {}
 
-            @owner        = nil
+            @owner       = nil
         end
 
         def type
@@ -89,6 +91,10 @@ module YAMTG
 
         def permanent?
             is_a? Permanent
+        end
+
+        def has?( name )
+            @abilities.include? name
         end
     end
 

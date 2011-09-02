@@ -29,7 +29,7 @@ module YAMTG
             play_some_land
 
             avail_mana = count_available_mana
-            puts "avail mana: #{avail_mana}"
+            # puts "avail mana: #{avail_mana}"
         end
     end
 end
