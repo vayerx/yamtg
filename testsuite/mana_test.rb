@@ -35,13 +35,13 @@ class TestMana < Test::Unit::TestCase
         assert_equal( 2, 2.black.total )
         assert_equal( 5, (2.black + 3.red).total )
         assert_equal( 1, (3.black - 2.colorless).total )
-        assert_equal( 1, (3.black - 2.colorless).total )
         assert_equal( 0, (1.black - 1.black).total )
         assert_equal( 0, (1.black - 1.colorless).total )
-        assert_equal( 1,           ((2.colorless + 1.red + 1.black) - 3.colorless).total )
-        assert_equal( 3,           ((2.colorless + 1.red + 3.black) - 3.black).total )
-        assert_equal( :red,        ((2.colorless + 1.red + 3.black) - 3.black).color )
-        assert_equal( :multicolor, ((3.colorless + 1.red + 4.black) - 3.black).color )
+        assert_equal( 1, ((1.red + 3.black) - 3.colorless).total )
+        assert_equal( 3, ((5.red + 3.black) - (2.colorless + 3.black)).total )
+        assert_equal( 3, ((5.red + 3.black) - (2.red + 3.black)).total )
+        assert_equal( :red, ((3.red + 3.black) - (2.colorless + 3.black)).color )
+        assert_raise( RuntimeError ) { 1.black - 2.colorless }
         assert_raise( RuntimeError ) { 1.colorless - 1.black }
         assert_raise( RuntimeError ) { 1.red - 1.white }
     end

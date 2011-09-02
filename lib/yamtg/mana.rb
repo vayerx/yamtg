@@ -54,31 +54,25 @@ module YAMTG
             Mana.new(@amount.merge(other.amount) { |key, a, b| a+b })
         end
 
-        def -(other)    # TODO optimize
+        def -(other)
             raise RuntimeError, "Don't know how to substract #{other.class} from Mana" if !other.is_a? Mana
+            raise RuntimeError, "Colorless mana detected!" if @amount.include? :colorless
             new = @amount.dup
-            sub = other.amount.dup
-            # handle colorless
-            if colorless = sub[:colorless]
-                # substract color-full
-                new.delete_if do |color, amount|
-                    if color != :colorless
-                        colorless -= (value = [colorless, amount].min)
-                        (new[color] -= value) == 0
-                    end
+            # exact matching
+            other.amount.each do |color, amount|
+                if color != :colorless
+                    value = new[color]
+                    raise RuntimeError, "Not enough #{color} mana (#{value} < #{amount})" if not value or value < amount
+                    value > amount ? new[color] -= amount : new.delete( color )
                 end
-                # substract colorless
+            end
+            # handle colorless
+            if colorless = other.amount[:colorless]
                 new.delete_if do |color, amount|
                     colorless -= (value = [colorless, amount].min)
                     (new[color] -= value) == 0
                 end
-                colorless != 0 ? sub[:colorless] = colorless : sub.delete( :colorless )
-            end
-            # exact matching
-            sub.each do |color, amount|
-                value = new[color]
-                raise RuntimeError, "Not enough #{color} mana (#{value} < #{amount})" if not value or value < amount
-                value > amount ? new[color] -= amount : new.delete( color )
+                raise RuntimeError, "Oops, not enough mana to substract colorless" if colorless != 0
             end
             Mana.new(new)
         end
