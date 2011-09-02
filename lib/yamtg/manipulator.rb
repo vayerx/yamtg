@@ -65,11 +65,7 @@ module YAMTG
         def battlefield( name = :all )
             name = player_name if name == :self
             @game.players.each do |player|
-                if name == :all
-                    player.battlefield.each { |card| yield card, player.name }
-                else # players amount is small
-                    player.battlefield.each { |card| yield card } if player.name == name
-                end
+                player.battlefield.each { |card| yield card, player.name } if name == :all or player.name == name
             end
         end
 

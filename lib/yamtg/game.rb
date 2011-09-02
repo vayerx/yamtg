@@ -20,7 +20,7 @@
 
 require 'yamtg/manipulator'
 require 'yamtg/player'
-require 'enumerator'
+require 'enumerator'    # ruby 1.8
 
 module YAMTG
     class Game

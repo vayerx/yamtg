@@ -21,6 +21,11 @@
 require 'yamtg/sets/alpha.rb'
 require 'test/unit'
 
+if not defined? KeyError    # ruby 1.8
+    class KeyError < StandardError
+    end
+end
+
 class TestCore < Test::Unit::TestCase
     include YAMTG
     AlphaSet = card_set 'Alpha'
@@ -36,7 +41,13 @@ class TestCore < Test::Unit::TestCase
     end
 
     def test_invalid
-        assert_raise( IndexError ) { AlphaSet.card( 'invalid card name' ) }
+        assert_raise( KeyError ) {
+            begin
+                AlphaSet.card( 'invalid-CARD-name' )
+            rescue IndexError       # ruby 1.8
+                raise KeyError
+            end
+        }
     end
 
     def test_autofetcher
@@ -44,7 +55,13 @@ class TestCore < Test::Unit::TestCase
             YAMTG::get_card 'Cloud Phantom'
             YAMTG::get_card 'Cloud Phantom', 'Alpha'
         end
-        assert_raise( IndexError ) { YAMTG::get_card 'Cloud Phantom', 'invalid set name' }
+        assert_raise( KeyError ) {
+            begin
+                YAMTG::get_card 'Cloud Phantom', 'invalid-SET-name'
+            rescue IndexError       # ruby 1.8
+                raise KeyError
+            end
+        }
     end
 
     def test_Phantom
