@@ -49,9 +49,9 @@ class TestCore < Test::Unit::TestCase
 
     def test_Phantom
         card = new_card 'Cloud Phantom', Creature
-        assert_equal( 'Illusion', card.type )
-        assert( card.type? 'Illusion' )
-        assert( !card.type?( 'Not Illusion' ) )
+        assert_equal( :Illusion, card.type )
+        assert( card.type? :Illusion )
+        assert( !card.type?( :NotIllusion ) )
         assert( card.permanent? )
         assert_equal( :black, card.color )
         assert_equal( 3, card.cost.total )
@@ -62,7 +62,7 @@ class TestCore < Test::Unit::TestCase
     # independent attributes (compared with Cloud Phantom)
     def test_Zephyr
         card = new_card 'Zephyr of the sky', Creature
-        assert_equal( 'Bird', card.type )
+        assert_equal( :Bird, card.type )
         assert_equal( :blue, card.color )
         assert_equal( 3, card.cost.total )
         assert_equal( 3, card.power )

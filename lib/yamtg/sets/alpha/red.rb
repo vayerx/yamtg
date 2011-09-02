@@ -19,36 +19,36 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-permanent "Mountain" do
-    type        "Land"
-    description "(Tap): Generate (R)"
+permanent 'Mountain' do
+    type        :Land
+    description '(Tap): Generate (R)'
 
     tap do |arena, card|
         card.owner.add_mana(1.red)
     end
 end
 
-creature "Dwarven Soldier" do
-    cost    1.red
-    type    "Dwarf"
+creature 'Dwarven Soldier' do
+    cost        1.red
+    type        :Dwarf
     power       1
     toughness   2
 end
 
-creature "Mountain Ogre" do
-    cost    1.red, 2.colorless
-    type    "Ogre"
+creature 'Mountain Ogre' do
+    cost        1.red, 2.colorless
+    type        :Ogre
     power       3
     toughness   4
 end
 
-creature "Cave Troll" do
-    cost    1.red, 2.colorless
-    type    "Troll"
+creature 'Cave Troll' do
+    cost        1.red, 2.colorless
+    type        :Troll
     power       2
     toughness   4
 
-    description "(R): Cave Troll gains +4/-1 until end of turn"
+    description '(R): Cave Troll gains +4/-1 until end of turn'
 
     attr_accessor :anger
 
@@ -78,13 +78,13 @@ creature "Cave Troll" do
     end
 end
 
-defender "Stonewall" do
-    cost    1.red, 2.colorless
-    type    "Wall"
-    toughness 5
+defender 'Stonewall' do
+    cost        1.red, 2.colorless
+    type        :Wall
+    toughness   5
 
-    description "(R)(R): Stonewall gains +3/0  until end of turn"
-    legend      "The screams were unbearable when the defenders poured boiling oil over the attackers."
+    description '(R)(R): Stonewall gains +3/0  until end of turn'
+    legend      'The screams were unbearable when the defenders poured boiling oil over the attackers.'
 
     attr_accessor :anger
 

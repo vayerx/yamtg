@@ -23,14 +23,14 @@ require 'yamtg/controller'
 module YAMTG
     class AiController < Controller
         def play_some_land
-            land = @actor.find_card_in_hand { |card| card.type? "Land" }
+            land = @actor.find_card_in_hand { |card| card.type? :Land }
             @actor.play_card land if land
         end
 
         # get amount of avaiable mana on the battlefield
         def count_available_mana
             avil_lands = 0
-            battlefield( :self ) { |card| avil_lands+=1 if card.type? "Land" and not card.tapped? }
+            battlefield( :self ) { |card| avil_lands+=1 if card.type? :Land and not card.tapped? }
             mana.total + avil_lands
         end
     end

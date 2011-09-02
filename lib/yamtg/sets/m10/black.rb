@@ -18,50 +18,52 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-creature "Black Knight" do
+creature 'Black Knight' do
     cost        2.black
-    type        "Human Knight"
+    type        :Human_Knight
     power       2
     toughness   2
+
     first_strike
 
-    description "Protection from white"
+    description 'Protection from white'
 end
 
-creature "Child of Night" do
+creature 'Child of Night' do
     cost        1.black, 1.colorless
-    type        "Vampire"
+    type        :Vampire
     power       2
     toughness   1
+
     lifelink
 
-    legend  "A vampire enacts vengeance on the entire world, claiming her debt two tiny pinpricks at a time."
+    legend  'A vampire enacts vengeance on the entire world, claiming her debt two tiny pinpricks at a time.'
 end
 
-creature "Dread Warlock" do
+creature 'Dread Warlock' do
     cost        2.black, 1.colorless
-    type        "Human Wizard"
+    type        :Human_Wizard
     power       2
     toughness   2
 
-    description "Dread Warlock can't be blocked except by black creatures"
+    description 'Dread Warlock can\'t be blocked except by black creatures'
 end
 
-creature "Drudge Skeletons" do
+creature 'Drudge Skeletons' do
     cost        1.black, 1.colorless
-    type        "Skeleton"
+    type        :Skeleton
     power       1
     toughness   1
 
-    description "{K}: Regenerate Drudge Skeletons"
+    description '{K}: Regenerate Drudge Skeletons'
 end
 
-source "Demon's Horn" do
+source 'Demon\'s Horn' do
     cost        2.colorless
     artifact
 end
 
-source "Duress" do
+source 'Duress' do
     cost        1.black
-    description "Target oppenent reveals his or her hand..."
+    description 'Target oppenent reveals his or her hand...'
 end
