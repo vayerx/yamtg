@@ -34,6 +34,13 @@ class TestGame < Test::Unit::TestCase
         reach
     end
 
+    permanent 'Fear' do
+        cost        2.black
+        type        :Aura
+        description 'Enchant creature. Enchanted creature has fear.'
+        fear        # hack?
+    end
+
     def setup
         @game = Game.new
 
@@ -41,6 +48,7 @@ class TestGame < Test::Unit::TestCase
         @pegasus  = get_card 'Pegasus'          # 2/2, flying, first strike
         @archers  = get_card 'Ezuri\'s Archers' # 1/2, reach
         @phantom  = get_card 'Cloud Phantom'    # 3/5
+        @fear     = get_card 'Fear'             # enchantment - aura
     end
 
     def test_Discard_excessive_cards
@@ -68,6 +76,15 @@ class TestGame < Test::Unit::TestCase
         @phantom.tap
         assert( !@phantom.can_block?(@archers) )    # basic tapped - basic
         assert( !@phantom.can_attack? && !@phantom.can_block? )
+    end
+
+    def test_Enchanted_cards
+        assert( @archers.can_block? @phantom )      # basic - basic
+        assert( !@phantom.has?(:fear) )
+        assert( @fear.has? :fear )
+        @phantom.attach @fear
+        assert( @phantom.has? :fear )
+        assert( !@archers.can_block?(@phantom) )    # basic with fear - basic
     end
 
     def test_Basic_damage_abilities

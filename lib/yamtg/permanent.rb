@@ -19,56 +19,58 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require 'yamtg/permanent'
+require 'yamtg/card'
 
 module YAMTG
-    class Creature < Permanent
+    class Permanent < Card
         class << self
-            %w[power toughness].each { |name|
-                define_method( name ) { |*val|
-                    return class_variable_get( '@@' + name ) if val.empty?
-                    class_variable_set( '@@' + name, val.first )
-                }
-            }
+            %w[fear first_strike flying reach vigilance].each { |name|
+            define_method( name ) { ability name.to_sym }
+        }
         end
+
+        attr_accessor :attachments
 
         def initialize
+            @tapped       = false   # TODO Enchantments class
+            @attachments = []       # cards (enchantments, equipments) attached to this card
             super
-            @power     = unmodified_power rescue 0
-            @toughness = unmodified_toughness rescue 0
         end
 
-        attr_accessor  :power, :toughness
-        %w[power toughness].each { |name|
-            define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) rescue 0 }
-        }
-
-        def can_attack?
-            !tapped?
+        def tapped?
+            @tapped
         end
 
-        def can_block?(card = nil)
-            if card
-                # TODO {island,...}walk should be handled somewhere (battlefield required)
-                return false if card.has? :unblockable
-                return false if card.has? :flying and !(has? :flying or has? :reach)
-                return false if card.has? :fear and not colors.include? :black
-            end
-            !tapped?
+        def tap
+            raise RuntimeError, "Card is already tapped" if tapped?
+            @tapped = true
+            self
+        end
+
+        def untap
+            raise RuntimeError, "Card is already untapped" if not tapped?
+            @tapped = false
+            self
+        end
+
+        def attach(card)
+            @attachments << card
+        end
+
+        def detach(card)
+            @attachments.delete(card)
+        end
+
+        def has?( name )
+            super or @attachments.find { |card| card.abilities.include? name } != nil
+        end
+
+        def ability_names
+            (abilities.keys + @attachments.map { |card| card.abilities.keys } ).uniq
         end
 
         def inspect
-            ab = ability_names
-            "[%s]: %s %d/%d, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color ] +
-                (ab.empty? ? "" : ' {' + ab.join(',') + '}') +
-                ' ' + (tapped? ? "tapped" : "untapped")
-        end
-    end
-
-
-    class Defender < Creature
-        def can_attack?
-            false
+            "[%s]: %s, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
         end
     end
 end

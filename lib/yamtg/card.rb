@@ -99,44 +99,6 @@ module YAMTG
     end
 
 
-    class Permanent < Card
-        def initialize
-            @tapped       = false
-            @attachements = []    # cards (enchantments, equipments) attached to this card
-            super
-        end
-
-        def tapped?
-            @tapped
-        end
-
-        def tap
-            raise RuntimeError, "Card is already tapped" if tapped?
-            @tapped = true
-            self
-        end
-
-        def untap
-            raise RuntimeError, "Card is already untapped" if not tapped?
-            @tapped = false
-            self
-        end
-
-        def attach(card)
-            @attachements << card
-        end
-
-        def detach(card)
-            @attachements.delete(card)
-        end
-
-        def inspect
-            "[%s]: %s, %s, %s" % [
-                name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color, tapped? ? "tapped" : "untapped" ]
-        end
-    end
-
-
     class Source < Card
     end
 end
