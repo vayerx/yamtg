@@ -51,10 +51,14 @@ module YAMTG
             end
         end
 
+    protected   # card owner should be read only by Cards (Controller isolation)
+        attr_reader     :owner
+
+    public      # card owner is set by owner :)
+        attr_writer     :owner
+
         attr_reader :name, :description, :legend
         attr_accessor :cost, :types, :colors
-
-        attr_accessor   :owner
 
         def initialize
             @name        = self.class.name rescue ""
@@ -103,11 +107,13 @@ module YAMTG
         def tap
             raise RuntimeError, "Card is already tapped" if tapped?
             @tapped = true
+            self
         end
 
         def untap
             raise RuntimeError, "Card is already untapped" if not tapped?
             @tapped = false
+            self
         end
 
         def attach(card)
