@@ -65,7 +65,7 @@ creature 'Djinn of Wishes' do
     DESC_END
 end
 
-source 'Convincing Mirage' do
+enchantment 'Convincing Mirage' do
     cost        1.blue, 1.colorless
     type        :Aura
 end

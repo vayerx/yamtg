@@ -35,44 +35,15 @@ module YAMTG
             @cards.fetch name
         end
 
-        # create a new class subclassing YAMTG::Permanent
-        def permanent( name, &desc )
-            perm = Class.new( Permanent ) {
-                name(name)
-            class_eval( &desc )
+        %w[permanent source creature defender land enchantment].each do |type|
+            define_method( type ) { |name, &block|
+                kobj = Class.new( eval type.capitalize ) {
+                    name(name)
+                    class_eval( &block )
+                }
+                @cards[ name ] = kobj
+                kobj
             }
-            @cards[ name ] = perm
-            perm
-        end
-
-        # create a new class subclassing YAMTG::Source
-        def source( name, &desc )
-            src = Class.new( Source ) {
-                name(name)
-                class_eval( &desc )
-            }
-            @cards[ name ] = src
-            src
-        end
-
-        # create a new class subclassing YAMTG::Creature
-        def creature( name, &desc )
-            mon = Class.new( Creature ) {
-                name( name )
-                class_eval( &desc )
-            }
-            @cards[ name ] = mon
-            mon
-        end
-
-        # create a new class subclassing YAMTG::Defender
-        def defender( name, &desc )
-            mon = Class.new( Defender ) {
-                name( name )
-                class_eval( &desc )
-            }
-            @cards[ name ] = mon
-            mon
         end
     end
 
@@ -97,25 +68,8 @@ module YAMTG
         attr_reader :default, :sets
     end
 
-
-    # create a new class subclassing YAMTG::Permanent
-    def permanent( name, &desc )
-        GlobalSets.instance.default.permanent( name, &desc )
-    end
-
-    # create a new class subclassing YAMTG::Source
-    def source( name, &desc )
-        GlobalSets.instance.default.source( name, &desc )
-    end
-
-    # create a new class subclassing YAMTG::Creature
-    def creature( name, &desc )
-        GlobalSets.instance.default.creature( name, &desc )
-    end
-
-    # create a new class subclassing YAMTG::Defender
-    def defender( name, &desc )
-        GlobalSets.instance.default.defender( name, &desc )
+    %w[permanent source creature defender land enchantment].each do |type|
+        define_method( type ) { |name, &block| GlobalSets.instance.default.send( type, name, &block ) }
     end
 
     def card_set( name )

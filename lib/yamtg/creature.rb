@@ -22,7 +22,7 @@
 require 'yamtg/permanent'
 
 module YAMTG
-    class Creature < Permanent
+    class Creature < Tapable
         class << self
             %w[power toughness].each { |name|
                 define_method( name ) { |*val|

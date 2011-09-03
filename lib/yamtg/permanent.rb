@@ -32,9 +32,27 @@ module YAMTG
         attr_accessor :attachments
 
         def initialize
-            @tapped       = false   # TODO Enchantments class
             @attachments = []       # cards (enchantments, equipments) attached to this card
             super
+        end
+
+        def has?( name )
+            super or @attachments.find { |card| card.abilities.include? name } != nil
+        end
+
+        def ability_names
+            (abilities.keys + @attachments.map { |card| card.abilities.keys } ).uniq
+        end
+
+        def inspect
+            "[%s]: %s, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
+        end
+    end
+
+    class Tapable < Permanent
+        def initialize
+            super
+            @tapped = false
         end
 
         def tapped?
@@ -60,17 +78,11 @@ module YAMTG
         def detach(card)
             @attachments.delete(card)
         end
+    end
 
-        def has?( name )
-            super or @attachments.find { |card| card.abilities.include? name } != nil
-        end
+    class Enchantment < Permanent
+    end
 
-        def ability_names
-            (abilities.keys + @attachments.map { |card| card.abilities.keys } ).uniq
-        end
-
-        def inspect
-            "[%s]: %s, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), color ]
-        end
+    class Land < Tapable
     end
 end

@@ -19,7 +19,7 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-permanent 'Swamp' do
+land 'Swamp' do
     type        :Land
     description '(Tap): Generate (K)'
 
