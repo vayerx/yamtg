@@ -31,6 +31,16 @@ module YAMTG
                 }
             }
 
+            def init
+                class_variable_set :@@name, ""
+                class_variable_set :@@cost, Mana.new
+                class_variable_set :@@types, []
+                class_variable_set :@@colors, []
+                class_variable_set :@@description, ""
+                class_variable_set :@@legend, ""
+                class_variable_set :@@abilities, {}
+            end
+
             def cost( *mana )
                 return class_variable_get( :@@cost ) if mana.empty?
                 class_variable_set( :@@cost, mana.inject( Mana.new ) { |a, b| a + b } )
@@ -41,8 +51,7 @@ module YAMTG
             end
 
             def ability( name, *val )
-                ab = abilities rescue abilities({})
-                ab[name] = val                          # TODO custom abilities (name, *cost, &action)
+                abilities[name] = val       # TODO custom abilities (name, *cost, &action)
             end
             def tap( *val, &descr )
                 # TODO
@@ -62,13 +71,13 @@ module YAMTG
         attr_accessor :cost, :types, :colors, :abilities
 
         def initialize
-            @name        = self.class.name rescue ""
-            @cost        = self.class.cost rescue Mana.new
-            @colors      = self.class.colors.empty? ? @cost.colors : self.class.colors rescue []
-            @types       = self.class.types rescue []
-            @description = self.class.description rescue ""
-            @legend      = self.class.legend rescue ""
-            @abilities   = self.class.abilities rescue {}
+            @name        = self.class.name
+            @cost        = self.class.cost
+            @colors      = self.class.colors.empty? ? @cost.colors : self.class.colors
+            @types       = self.class.types
+            @description = self.class.description
+            @legend      = self.class.legend
+            @abilities   = self.class.abilities
 
             @owner       = nil
         end

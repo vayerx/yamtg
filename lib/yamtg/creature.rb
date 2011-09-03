@@ -30,17 +30,22 @@ module YAMTG
                     class_variable_set( '@@' + name, val.first )
                 }
             }
+            def init
+                super
+                class_variable_set :@@power, 0
+                class_variable_set :@@toughness, 0
+            end
         end
 
         def initialize
             super
-            @power     = unmodified_power rescue 0
-            @toughness = unmodified_toughness rescue 0
+            @power     = unmodified_power
+            @toughness = unmodified_toughness
         end
 
         attr_accessor  :power, :toughness
         %w[power toughness].each { |name|
-            define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) rescue 0 }
+            define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) }
         }
 
         def can_attack?

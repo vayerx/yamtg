@@ -38,6 +38,7 @@ module YAMTG
         %w[permanent source creature defender land enchantment].each do |type|
             define_method( type ) { |name, &block|
                 kobj = Class.new( eval type.capitalize ) {
+                    init
                     name(name)
                     class_eval( &block )
                 }
