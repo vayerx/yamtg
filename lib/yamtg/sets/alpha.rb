@@ -1,6 +1,6 @@
 #############################################################################
 #    Yet Another 'Magic: The Gathering' Game Simulator                      #
-#    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>,                   #
+#    (C) 2009-2011, Vasiliy Yeremeyev <vayerx@gmail.com>                    #
 #                                                                           #
 #    This program is free software; you can redistribute it and/or modify   #
 #    it under the terms of the GNU General Public License as published by   #
@@ -26,3 +26,4 @@ require 'yamtg/sets/alpha/black'
 require 'yamtg/sets/alpha/blue'
 require 'yamtg/sets/alpha/red'
 require 'yamtg/sets/alpha/white'
+# require 'yamtg/sets/mt10/green'

@@ -24,9 +24,9 @@ require 'yamtg/card'
 module YAMTG
     class Permanent < Card
         class << self
-            %w[fear first_strike flying reach vigilance].each { |name|
-            define_method( name ) { ability name.to_sym }
-        }
+            %w[fear first_strike flying deathtouch lifelink reach vigilance].each { |name|
+                define_method( name ) { ability name.to_sym }
+            }
         end
 
         attr_accessor :attachments

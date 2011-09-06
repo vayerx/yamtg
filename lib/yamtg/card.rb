@@ -41,6 +41,10 @@ module YAMTG
                 class_variable_set :@@abilities, {}
             end
 
+            def artifact
+                types :artifact
+            end
+
             def cost( *mana )
                 return class_variable_get( :@@cost ) if mana.empty?
                 class_variable_set( :@@cost, mana.inject( Mana.new ) { |a, b| a + b } )

@@ -24,9 +24,9 @@ creature 'Tideforce Elemental' do
     power       2
     toughness   1
 
-    ability 1.colorless, :tap do |arena, card|
-        # TODO
-    end
+    # ability 1.colorless, :tap do |arena, card|
+    #     # TODO
+    # end
 
     description <<-DECRIPTION_END.gsub(/\s+/, ' ').strip
         {U}, {T}: You may tap or untap another target creature.\n
