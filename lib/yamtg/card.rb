@@ -51,7 +51,8 @@ module YAMTG
             end
 
             def type( *name )
-                types( name )
+                return types if name.empty?
+                types( types.concat name )
             end
 
             def ability( name, *val )

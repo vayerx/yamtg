@@ -35,7 +35,7 @@ module YAMTG
             @cards.fetch name
         end
 
-        %w[permanent source creature defender land enchantment].each do |type|
+        %w[permanent source creature defender land enchantment equipment].each do |type|
             define_method( type ) { |name, &block|
                 kobj = Class.new( eval type.capitalize ) {
                     init
@@ -69,7 +69,7 @@ module YAMTG
         attr_reader :default, :sets
     end
 
-    %w[permanent source creature defender land enchantment].each do |type|
+    %w[permanent source creature defender land enchantment equipment].each do |type|
         define_method( type ) { |name, &block| GlobalSets.instance.default.send( type, name, &block ) }
     end
 

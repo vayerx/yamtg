@@ -80,8 +80,22 @@ module YAMTG
         end
     end
 
+
     class Enchantment < Permanent
     end
+
+
+    class Equipment < Permanent
+        def equip( card )
+            raise RuntimeError, "Can't equip: #{card.inspect} isn't a creature" if !card.is_a? Creature
+            card.attach( self )
+        end
+
+        def unequip( card )
+            card.detach( self )
+        end
+    end
+
 
     class Land < Tapable
     end

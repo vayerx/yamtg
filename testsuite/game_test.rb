@@ -49,6 +49,7 @@ class TestGame < Test::Unit::TestCase
         @archers  = get_card 'Ezuri\'s Archers' # 1/2, reach
         @phantom  = get_card 'Cloud Phantom'    # 3/5
         @fear     = get_card 'Fear'             # enchantment - aura
+        @kitesail = get_card 'Kitesail'         # artifact equipment
     end
 
     def test_Discard_excessive_cards
@@ -85,6 +86,23 @@ class TestGame < Test::Unit::TestCase
         @phantom.attach @fear
         assert( @phantom.has? :fear )
         assert( !@archers.can_block?(@phantom) )    # basic with fear - basic
+    end
+
+    def test_Eqipped_cards
+        assert( !@phantom.has?(:flying) )
+        @kitesail.equip @phantom
+        assert( @phantom.has?(:flying) )
+        @kitesail.unequip @phantom
+        assert( !@phantom.has?(:flying) )
+    end
+
+    # Equipment detachment shouldn't remove "native" attributes
+    def test_Eqippement_removal
+        assert( @gargoyle.has?(:flying) )
+        @kitesail.equip @gargoyle           # @gargoyle now has "double" flying
+        assert( @gargoyle.has?(:flying) )
+        @kitesail.unequip @gargoyle
+        assert( @gargoyle.has?(:flying) )
     end
 
     def test_Basic_damage_abilities
