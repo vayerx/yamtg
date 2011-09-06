@@ -29,22 +29,19 @@ end
 
 class TestCore < Test::Unit::TestCase
     include YAMTG
-    AlphaSet = card_set 'Alpha'
 
     def new_card( name, klass = Card )
-        card_class = AlphaSet.card( name )
-        assert( card_class )
-        card = card_class.new
-        assert( card )
-        assert( card.kind_of? klass )
+        card = get_card name
+        assert( card && card.is_a?(klass) )
         assert_equal( name, card.name )
         card
     end
 
     def test_invalid
+        alpha = card_set 'Alpha'
         assert_raise( KeyError ) {
             begin
-                AlphaSet.card( 'invalid-CARD-name' )
+                alpha.card( 'invalid-CARD-name' )
             rescue IndexError       # ruby 1.8
                 raise KeyError
             end
