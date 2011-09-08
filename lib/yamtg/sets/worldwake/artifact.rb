@@ -23,9 +23,14 @@ equipment 'Kitesail' do
     type        :Artifact
 
     ability :equip, 2.colorless do |arena, card|
-        # TODO cleanup after removal!
-        card.abilities << :flying
+        abilities[:flying] = nil    # add ability to self
         card.power += 1
+    end
+
+    def unequip(arena, card)
+        abilities.delete :flying    # remove ability from self
+        card.power -= 1
+        super
     end
 
     description <<-DECRIPTION_END.gsub(/\s+/, ' ').strip

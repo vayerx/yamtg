@@ -86,12 +86,16 @@ module YAMTG
 
 
     class Equipment < Permanent
-        def equip( card )
+	# TODO maybe inversion of abilities calling isn't a good idea
+        def equip( arena, card )
             raise RuntimeError, "Can't equip: #{card.inspect} isn't a creature" if !card.is_a? Creature
+            action = abilities.fetch :equip
+            card.owner.mana -= action[:cost] if card.owner      # TODO non-mana costs
+            action[:action].call arena, card
             card.attach( self )
         end
 
-        def unequip( card )
+        def unequip( arena, card )
             card.detach( self )
         end
     end

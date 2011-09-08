@@ -90,18 +90,21 @@ class TestGame < Test::Unit::TestCase
 
     def test_Eqipped_cards
         assert( !@phantom.has?(:flying) )
-        @kitesail.equip @phantom
+        assert_equal( 3, @phantom.power )
+        @kitesail.equip nil, @phantom
         assert( @phantom.has?(:flying) )
-        @kitesail.unequip @phantom
+        assert_equal( 4, @phantom.power )
+        @kitesail.unequip nil, @phantom
         assert( !@phantom.has?(:flying) )
+        assert_equal( 3, @phantom.power )
     end
 
     # Equipment detachment shouldn't remove "native" attributes
     def test_Eqippement_removal
         assert( @gargoyle.has?(:flying) )
-        @kitesail.equip @gargoyle           # @gargoyle now has "double" flying
+        @kitesail.equip nil, @gargoyle              # @gargoyle now has "double" flying
         assert( @gargoyle.has?(:flying) )
-        @kitesail.unequip @gargoyle
+        @kitesail.unequip nil, @gargoyle
         assert( @gargoyle.has?(:flying) )
     end
 

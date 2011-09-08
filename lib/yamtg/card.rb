@@ -55,8 +55,8 @@ module YAMTG
                 types( types.concat name )
             end
 
-            def ability( name, *val )
-                abilities[name] = val       # TODO custom abilities (name, *cost, &action)
+            def ability( name, *cost, &action)
+                abilities[name] = block_given? ? { :cost => cost, :action => Proc.new( &action ) } : { :cost => cost }
             end
             def tap( *val, &descr )
                 # TODO
