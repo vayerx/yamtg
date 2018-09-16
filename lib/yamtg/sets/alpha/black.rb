@@ -28,11 +28,12 @@ land 'Swamp' do
     end
 end
 
-defender 'Tarpit' do
+creature 'Tarpit' do
     cost        1.black, 1.colorless
     type        :Trap
     power       0
     toughness   4
+    defender
 
     description '(K)(K): When blocking, destroy the blocked card, the card still deals the damage'
     legend <<-LEGEND_END.gsub(/\s+/, ' ').strip

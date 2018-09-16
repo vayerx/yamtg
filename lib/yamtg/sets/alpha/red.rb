@@ -78,10 +78,11 @@ creature 'Cave Troll' do
     end
 end
 
-defender 'Stonewall' do
+creature 'Stonewall' do
     cost        1.red, 2.colorless
     type        :Wall
     toughness   5
+    defender
 
     description '(R)(R): Stonewall gains +3/0  until end of turn'
     legend      'The screams were unbearable when the defenders poured boiling oil over the attackers.'

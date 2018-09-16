@@ -87,14 +87,14 @@ class TestCore < Test::Unit::TestCase
         assert( !card.has?( :first_strike ) )
     end
 
-    source 'Duress' do
+    sorcery 'Duress' do
         cost        1.black
         description 'Target oppenent reveals his or her hand...'
     end
 
-    # Source
+    # Sorcery
     def test_Duress
-        card = new_card 'Duress', Source
+        card = new_card 'Duress', Sorcery
         assert( !card.permanent? )
         assert_equal( :black, card.color )
         assert_equal( 1, card.cost.total )
@@ -113,8 +113,9 @@ class TestCore < Test::Unit::TestCase
 
     # "dynamic" attributes
     def test_Stonewall
-        card = new_card 'Stonewall', Defender
+        card = new_card 'Stonewall', Creature
         assert( !card.can_attack? )
+        assert( card.defender? )
         assert_equal( 0, card.power )       # initial power (isn't defined in spec)
         assert_equal( 0, card.anger )       # initial anger (card-specific)
         card.anger = 1

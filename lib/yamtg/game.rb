@@ -41,8 +41,8 @@ module YAMTG
         def start_game( shuffle_cards = :shuffle )
             raise RuntimeError, "Can't start game -- no players" if @players.empty?
             @active_index = 0
-            @players.each { |player| player.draw 7 }
             @players.each { |player| player.deck.shuffle! } if shuffle_cards == :shuffle
+            @players.each { |player| player.draw 7 }
         end
 
         def next_round

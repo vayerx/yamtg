@@ -83,7 +83,6 @@ module YAMTG
             @description = self.class.description
             @legend      = self.class.legend
             @abilities   = self.class.abilities
-
             @owner       = nil
         end
 
@@ -113,6 +112,10 @@ module YAMTG
     end
 
 
-    class Source < Card
+    class Sorcery < Card
     end
+
+    class Instant < Card
+    end
+
 end

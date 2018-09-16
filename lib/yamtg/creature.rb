@@ -34,6 +34,11 @@ module YAMTG
                 super
                 class_variable_set :@@power, 0
                 class_variable_set :@@toughness, 0
+                class_variable_set :@@is_defender, false
+            end
+
+            %w[defender].each do |name|
+                define_method( name ) { class_variable_set( '@@is_' + name, true ) }
             end
         end
 
@@ -48,8 +53,12 @@ module YAMTG
             define_method( 'unmodified_' + name ) { self.class.send( :class_variable_get, '@@' + name ) }
         }
 
+        %w[defender].each do |name|
+            define_method( name + '?' ) { self.class.send( :class_variable_get, '@@is_' + name ) }
+        end
+
         def can_attack?
-            !tapped?
+            !tapped? && !defender?
         end
 
         def can_block?(card = nil)
@@ -67,13 +76,6 @@ module YAMTG
             "[%s]: %s %d/%d, %s" % [ name, self.class.superclass.to_s.sub( /YAMTG::/, ''), power, toughness, color ] +
                 (ab.empty? ? "" : ' {' + ab.join(',') + '}') +
                 ' ' + (tapped? ? "tapped" : "untapped")
-        end
-    end
-
-
-    class Defender < Creature
-        def can_attack?
-            false
         end
     end
 end

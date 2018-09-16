@@ -58,12 +58,12 @@ creature 'Drudge Skeletons' do
     description '{K}: Regenerate Drudge Skeletons'
 end
 
-source 'Demon\'s Horn' do
+sorcery 'Demon\'s Horn' do
     cost        2.colorless
     artifact
 end
 
-source 'Duress' do
+sorcery 'Duress' do
     cost        1.black
     description 'Target oppenent reveals his or her hand...'
 end

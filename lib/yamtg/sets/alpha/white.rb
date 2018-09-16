@@ -40,10 +40,11 @@ creature 'Pegasus' do
 end
 
 # Weak Blocker type, but at least it's tough and can be eaten
-defender 'Honeypot Plant' do
+creature 'Honeypot Plant' do
     cost        1.white, 1.colorless
     type        'Plant'
     toughness   4
+    defender
 
     description '(Tap): Sacrifice to gain 5 life'
     legend   'These plants were created by the great magicians to endure lasting sieges.'

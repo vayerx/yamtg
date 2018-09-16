@@ -37,7 +37,7 @@ module YAMTG
         end
 
         def has?( name )
-            super or @attachments.find { |card| card.abilities.include? name } != nil
+            super or @attachments.find { |card| card.has?( name ) } != nil
         end
 
         def ability_names

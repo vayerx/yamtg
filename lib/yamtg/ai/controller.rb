@@ -29,7 +29,7 @@ module YAMTG
 
         # get amount of available mana on the battlefield
         def count_available_mana
-            avail_lands = battlefield( :self ).count { |card,p| card.type? :Land and not card.tapped? }
+            avail_lands = battlefield( :self ).count { |card, _| card.type? :Land and not card.tapped? }
             mana.total + avail_lands
         end
     end
