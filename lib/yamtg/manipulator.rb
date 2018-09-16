@@ -23,6 +23,8 @@ module YAMTG
     class Manipulator
         attr_accessor :game, :player
         def initialize( game, player )
+            raise ArgumentError unless player.is_a? Player
+
             @game = game
             @player = player
         end

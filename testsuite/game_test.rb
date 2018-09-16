@@ -59,8 +59,6 @@ class TestGame < Test::Unit::TestCase
 
         @game.start_game
         assert( player.graveyard.empty? )
-        @game.next_round     # 7 cards
-        assert( player.graveyard.empty? )
         @game.next_round     # 8 cards - 1 card should be discarded
         assert( !player.graveyard.empty? )
         assert_equal( 'Dwarven Soldier', player.graveyard.first.name )

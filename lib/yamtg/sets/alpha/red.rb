@@ -57,7 +57,7 @@ creature 'Cave Troll' do
     end
 
     event :end_of_turn do |arena, card|
-        card.anger -= 1 if card.anger > 0
+        card.anger = 0
     end
 
     def initialize
