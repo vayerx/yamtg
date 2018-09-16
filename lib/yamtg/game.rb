@@ -86,8 +86,8 @@ module YAMTG
             controller.on_end_step
 
             # cleanup step
-            if player.hand.size > player.handsize
-                excessive = player.hand.size - player.handsize
+            if player.hand.size > player.max_hand_size
+                excessive = player.hand.size - player.max_hand_size
                 range = controller.on_discard_cards excessive
                 raise RuntimeError, "Discarded #{range.count} cards instead of #{excessive}" if range.count != excessive
                 player.discard range

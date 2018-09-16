@@ -55,19 +55,21 @@ module YAMTG
         end
 
         def -(other)
-            raise RuntimeError, "Don't know how to substract #{other.class} from Mana" if !other.is_a? Mana
+            raise RuntimeError, "Don't know how to substract #{other.class} from Mana" unless other.is_a? Mana
             raise RuntimeError, "Colorless mana detected!" if @amount.include? :colorless
             new = @amount.dup
             # exact matching
             other.amount.each do |color, amount|
                 if color != :colorless
                     value = new[color]
-                    raise RuntimeError, "Not enough #{color} mana (#{value} < #{amount})" if not value or value < amount
+                    raise RuntimeError, "Not enough #{color} mana: #{value} < #{amount}" if not value or value < amount
                     value > amount ? new[color] -= amount : new.delete( color )
                 end
             end
+
             # handle colorless
-            if colorless = other.amount[:colorless]
+            colorless = other.amount[:colorless]
+            if colorless
                 new.delete_if do |color, amount|
                     colorless -= (value = [colorless, amount].min)
                     (new[color] -= value) == 0
@@ -106,7 +108,7 @@ module YAMTG
 
         def infer_color
             k = @amount.keys - [:colorless, :infinite]
-            if k.empty? then
+            if k.empty?
                 :artifact
             else
                 k.grep(Array).empty? && k.length == 1 ? k.first : :multicolor
@@ -118,19 +120,19 @@ module YAMTG
             a         = @amount.reject { |k,v| !(String === v) && v < 1 }
             colorless = a[:colorless] ? ["(#{a.delete(:colorless)})"] : []
             infinite  = a[:infinite] ? ["(#{a.delete(:infinite).split(//).sort.join(')(')})"] : []
-            if x then
-                monocolor  = Mana.colors.map { |color| "#{a.delete(color)}x(#{Mana.chars[color]})" if a[color] }.compact
+            if x
+                monocolor  = Mana::Colors.map { |color| "#{a.delete(color)}x(#{Mana.chars[color]})" if a[color] }.compact
                 multicolor = a.map { |k,v| "#{v}x(#{k.map { |color| Mana.chars[color] }.join('/')})" }
                 (multicolor + monocolor + colorless + infinite).join(", ")
             else
-                monocolor  = Mana.colors.map { |color| "(#{Mana.chars[color]})"*a.delete(color) if a[color] }.compact
+                monocolor  = Mana::Colors.map { |color| "(#{Mana.chars[color]})"*a.delete(color) if a[color] }.compact
                 multicolor = a.map { |k,v| "(#{k.map { |color| Mana.chars[color] }.join('/')})"*v }
                 (multicolor + monocolor + colorless + infinite).join("")
             end
         end
 
         def inspect
-            if @amount.empty? then
+            if @amount.empty?
                 "#<%s total: %d>" %  [self.class, @total]
             else
                 "#<%s total: %d, %s>" %  [self.class, @total, @amount.map { |k,v|
@@ -146,7 +148,7 @@ module YAMTG
 
 end
 
-class Fixnum
+class Integer
     YAMTG::Mana::Colors.each { |color|
         define_method( color ) {
             YAMTG::Mana.new( color => self )

@@ -30,17 +30,17 @@ module YAMTG
         # Get a random element of this stack
         # With an argument it gets you n elements without no index used more than once
         def random( n = nil )
-            unless n then
-                at( rand( length ) )
-            else
-                raise ArgumentError unless Integer === n and n.between?( 0, length )
+            if n
+                raise ArgumentError unless Integer === n and n.between?(0, length)
                 arr = dup
                 l = length
                 n.times { |i|
-                    r = rand( l - i ) + i
+                    r = rand(l - i) + i
                     arr[r], arr[i] = arr[i], arr[r]
                 }
                 arr.first(n)
+            else
+                at(rand(length))
             end
         end
     end

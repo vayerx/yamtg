@@ -66,7 +66,7 @@ module YAMTG
         end
 
         def untap
-            raise RuntimeError, "Card is already untapped" if not tapped?
+            raise RuntimeError, "Card is already untapped" unless tapped?
             @tapped = false
             self
         end
@@ -86,7 +86,7 @@ module YAMTG
 
 
     class Equipment < Permanent
-	# TODO maybe inversion of abilities calling isn't a good idea
+        # TODO maybe inversion of abilities calling isn't a good idea
         def equip( arena, card )
             raise RuntimeError, "Can't equip: #{card.inspect} isn't a creature" if !card.is_a? Creature
             action = abilities.fetch :equip

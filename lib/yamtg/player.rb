@@ -26,21 +26,21 @@ module YAMTG
     class Player
         attr_reader   :name
         attr_accessor :health
-        attr_accessor :handsize
+        attr_accessor :max_hand_size
         attr_accessor :hand
         attr_accessor :battlefield
         attr_accessor :graveyard
         attr_accessor :mana
 
-        def initialize( name, health = 20, handsize = 7 )
-            @name       = name.freeze
-            @health     = health
-            @handsize   = handsize
-            @hand       = []
-            @battlefield= []
-            @deck       = Deck.new
-            @graveyard  = Stack.new
-            @mana       = Mana.new
+        def initialize( name, health = 20, hand_size = 7 )
+            @name          = name.freeze
+            @health        = health
+            @max_hand_size = hand_size
+            @hand          = []
+            @battlefield   = []
+            @deck          = Deck.new
+            @graveyard     = Stack.new
+            @mana          = Mana.new
         end
 
         def deck( *var )

@@ -27,10 +27,10 @@ module YAMTG
             @actor.play_card land if land
         end
 
-        # get amount of avaiable mana on the battlefield
+        # get amount of available mana on the battlefield
         def count_available_mana
-            avil_lands = battlefield( :self ).count { |card,p| card.type? :Land and not card.tapped? }
-            mana.total + avil_lands
+            avail_lands = battlefield( :self ).count { |card,p| card.type? :Land and not card.tapped? }
+            mana.total + avail_lands
         end
     end
 end

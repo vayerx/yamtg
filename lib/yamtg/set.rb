@@ -83,6 +83,7 @@ module YAMTG
             begin
                 return set.card( card_name )
             rescue IndexError
+                # ignored
             end
         end
         raise IndexError, "Card #{card_name} not found"

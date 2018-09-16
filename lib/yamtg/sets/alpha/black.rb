@@ -92,7 +92,7 @@ creature 'Gargoyle' do
     end
 
     def morph(to_artefact)
-        if to_artefact then
+        if to_artefact
             @power      = 0
             @toughness  = 4
             @flags      = []

@@ -80,19 +80,15 @@ module YAMTG
         end
 
     protected   # shortcuts
-        def handsize
-            @actor.handsize
-        end
-
-        if defined? Enumerable  # ruby 1.8
-            include Enumerable
+        def max_hand_size
+            @actor.max_hand_size
         end
 
         def battlefield( name = :all, &block )
             if block_given?
                 @actor.battlefield( name, &block )
             else
-                Enumerator.new( @actor, :battlefield, name )
+                @actor.to_enum( :battlefield, name )
             end
         end
 

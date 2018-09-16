@@ -22,7 +22,7 @@ require 'yamtg/sets/sets'
 require 'test/unit'
 require 'pp'
 
-if not defined? KeyError    # ruby 1.8
+unless defined? KeyError # ruby 1.8
     class KeyError < StandardError
     end
 end
@@ -104,7 +104,7 @@ class TestCore < Test::Unit::TestCase
     def test_modification
         card1 = new_card 'Zephyr of the sky'
         assert_equal( 3, card1.power )
-        card1.power = 1;
+        card1.power = 1
         assert_equal( 1, card1.power )
 
         card2 = new_card 'Zephyr of the sky'
