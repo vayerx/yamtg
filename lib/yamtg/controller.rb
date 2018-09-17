@@ -34,7 +34,7 @@ module YAMTG
         # Beginning Phase: untap, upkeep, and draw
         #
         def on_untap_step
-            battlefield( :self ).each { |card,p| card.untap if card.is_a? Card and card.permanent? and card.tapped? }
+            battlefield( :self ).each { |card, _| card.untap if card.tapped? }
         end
 
         def on_upkeep_step

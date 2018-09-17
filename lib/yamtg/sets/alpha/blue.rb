@@ -100,12 +100,12 @@ creature 'Deep Sea Underground Oracle' do
     legend 'The Oracle was a difficult place to reach, but once ' \
            'someone found it, it was a place for wisdom and knowledge.'
 
-    event :comes_into_play do |arena, card|
+    event :comes_into_play do |_arena, card|
         card.owner.takeup(2)
     end
 
     # tap it to draw 2 cards
-    tap do |arena, card|
+    tap do |_arena, card|
         card.owner.takeup(2)
     end
 end

@@ -24,7 +24,7 @@ require 'set'
 module YAMTG
 
     class Mana
-        Colors = [ :red, :green, :blue, :black, :white, :colorless ]
+        Colors = %i{red green blue black white colorless}
         Chars  = { :red => "R", :green => "G", :blue => "B", :black => "K", :white => "W" }
 
         class << self
@@ -39,9 +39,9 @@ module YAMTG
 
         def initialize(mana={})
             @amount = Hash[*mana.map { |k, v| Array === k ? [Mana.sort(k), v] : [k, v] }.flatten]
-            @amount.reject! { |k,v| k != :infinite && v.zero? }
+            @amount.reject! { |k, v| k != :infinite && v.zero? }
             @amount.freeze
-            @total  = @amount.values.inject(0) { |a,b| String === b ? a : a+b }
+            @total  = @amount.values.inject(0) { |a, b| String === b ? a : a + b }
             @colors = @amount.keys.inject(Set.new) { |res, color| res << color if color != :colorless; res }
             @colors = [:colorless] if @colors.empty?
         end
@@ -51,7 +51,7 @@ module YAMTG
         end
 
         def +(other)
-            Mana.new(@amount.merge(other.amount) { |key, a, b| a+b })
+            Mana.new(@amount.merge(other.amount) { |key, a, b| a + b })
         end
 
         def -(other)
@@ -98,7 +98,7 @@ module YAMTG
 
         # returns the colors that are negative if there are any
         def negative?
-            found = @amount.reject { |k,v| !(String === v) && v >= 0 }
+            found = @amount.reject { |k, v| !(String === v) && v >= 0 }
             found.empty? ? false : found.keys
         end
 

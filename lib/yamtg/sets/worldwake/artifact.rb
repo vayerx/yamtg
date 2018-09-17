@@ -22,7 +22,7 @@ equipment 'Kitesail' do
     cost        2.colorless
     type        :Artifact
 
-    ability :equip, 2.colorless do |arena, card|
+    ability :equip, 2.colorless do |_arena, card|
         abilities[:flying] = nil    # add ability to self
         card.power += 1
     end

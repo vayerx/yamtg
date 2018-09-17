@@ -23,7 +23,7 @@ land 'Swamp' do
     type        :Land
     description '(Tap): Generate (K)'
 
-    tap do |arena, card|
+    tap do |_arena, card|
         card.owner.add_mana(1.black)
     end
 end
@@ -85,10 +85,10 @@ creature 'Gargoyle' do
     description '(K): Turn gargoyle into 0/4 non-flying artefact until end of turn.'
     legend      'Stone at day, murdering beast at night.'
 
-    ability :morph, 1.black do |arena, card|
+    ability :morph, 1.black do |_arena, card|
         card.morph(true)
     end
-    event :end_of_turn do |arena, card|
+    event :end_of_turn do |_arena, card|
         card.morph(false)
     end
 
