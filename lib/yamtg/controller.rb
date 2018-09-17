@@ -39,14 +39,15 @@ module YAMTG
 
         def on_upkeep_step
         end
+
         def on_draw_step
             @actor.draw_card
         end
 
         #
-        # Main Phase
+        # First Main Phase
         #
-        def on_main_phase
+        def on_first_main_phase
         end
 
         #
@@ -54,13 +55,23 @@ module YAMTG
         #
         def on_beginning_of_combat_step
         end
+
         def on_declare_attackers_step
         end
+
         def on_declare_blockers_step
         end
+
         def on_combat_damage_step
         end
+
         def on_end_of_combat_step
+        end
+
+        #
+        # Second Main Phase
+        #
+        def on_second_main_phase
         end
 
         #

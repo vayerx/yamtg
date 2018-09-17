@@ -75,7 +75,7 @@ module YAMTG
             controller.on_upkeep_step
             controller.on_draw_step
 
-            controller.on_main_phase
+            controller.on_first_main_phase
 
             controller.on_beginning_of_combat_step
             controller.on_declare_attackers_step

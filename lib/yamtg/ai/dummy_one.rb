@@ -25,7 +25,7 @@ module YAMTG
         #
         # Main Phase
         #
-        def on_main_phase
+        def on_first_main_phase
             play_some_land
 
             avail_mana = count_available_mana
