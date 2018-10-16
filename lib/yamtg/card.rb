@@ -68,11 +68,8 @@ module YAMTG
             end
         end
 
-    protected   # card owner should be read only by Cards (Controller isolation)
-        attr_reader     :owner
-
     public      # card owner is set by owner :)
-        attr_writer     :owner
+        attr_accessor :owner, :controller
 
         attr_reader :name, :description, :legend
         attr_accessor :cost, :types, :colors, :abilities

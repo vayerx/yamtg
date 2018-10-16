@@ -37,25 +37,25 @@ module YAMTG
             @player.discard index_or_range
         end
 
-        def play_card( index )
-            # TODO triggers, actions, etc.
-            raise IndexError, "Invalid card index #{index}" if index >= @player.hand.size
-            card = @player.hand[index]
+        def play_card(card)
+            # TODO: triggers, actions, etc.
+            raise IndexError, "No such card in hand: #{card}" unless @player.hand.index card
 
-            # TODO card-specific costs
+            # TODO: card-specific costs
             raise RuntimeError, "Not enough mana to play #{card.inspect}: #{@player.mana} < #{card.cost}" if @player.mana < card.cost
             @player.mana -= card.cost
 
-            card = @player.hand.slice! index
-
-            # TODO card-dependent logic!
+            # TODO: card-dependent logic!
             (card.permanent? ? @player.battlefield : @player.graveyard) << card
+
+            card.controller = @player
 
             # pp @player
         end
 
-        def find_card_in_hand( &block )
-            @player.hand.index( &block )
+        def find_card_in_hand(&block)
+            index = @player.hand.index(&block)
+            index ? @player.hand[index] : nil
         end
 
         def player_name
