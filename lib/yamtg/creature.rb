@@ -37,6 +37,8 @@ module YAMTG
                 class_variable_set :@@power, 0
                 class_variable_set :@@toughness, 0
                 class_variable_set :@@is_defender, false
+
+                type :Creature
             end
 
             %w[defender].each do |name|

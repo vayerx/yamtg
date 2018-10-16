@@ -76,7 +76,6 @@ end
 
 creature 'Gargoyle' do
     cost        2.black
-    type        :Creature
     power       2
     toughness   2
 
