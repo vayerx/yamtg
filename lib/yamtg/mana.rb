@@ -121,12 +121,12 @@ module YAMTG
             colorless = a[:colorless] ? ["(#{a.delete(:colorless)})"] : []
             infinite  = a[:infinite] ? ["(#{a.delete(:infinite).split(//).sort.join(')(')})"] : []
             if x
-                monocolor  = Mana::Colors.map { |color| "#{a.delete(color)}x(#{Mana.chars[color]})" if a[color] }.compact
-                multicolor = a.map { |k,v| "#{v}x(#{k.map { |color| Mana.chars[color] }.join('/')})" }
+                monocolor  = Mana::Colors.map { |color| "#{a.delete(color)}x(#{Mana::Chars[color]})" if a[color] }.compact
+                multicolor = a.map { |k,v| "#{v}x(#{k.map { |color| Mana::Chars[color] }.join('/')})" }
                 (multicolor + monocolor + colorless + infinite).join(", ")
             else
-                monocolor  = Mana::Colors.map { |color| "(#{Mana.chars[color]})"*a.delete(color) if a[color] }.compact
-                multicolor = a.map { |k,v| "(#{k.map { |color| Mana.chars[color] }.join('/')})"*v }
+                monocolor  = Mana::Colors.map { |color| "(#{Mana::Chars[color]})"*a.delete(color) if a[color] }.compact
+                multicolor = a.map { |k,v| "(#{k.map { |color| Mana::Chars[color] }.join('/')})"*v }
                 (multicolor + monocolor + colorless + infinite).join("")
             end
         end
