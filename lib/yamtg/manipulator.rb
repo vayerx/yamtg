@@ -39,12 +39,14 @@ module YAMTG
 
         def play_card( index )
             # TODO triggers, actions, etc.
-            card = @player.hand.slice! index
-            raise IndexError, "Invalid card index #{index}" unless card
+            raise IndexError, "Invalid card index #{index}" if index >= @player.hand.size
+            card = @player.hand[index]
 
             # TODO card-specific costs
             raise RuntimeError, "Not enough mana to play #{card.inspect}: #{@player.mana} < #{card.cost}" if @player.mana < card.cost
             @player.mana -= card.cost
+
+            card = @player.hand.slice! index
 
             # TODO card-dependent logic!
             (card.permanent? ? @player.battlefield : @player.graveyard) << card
