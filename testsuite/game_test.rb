@@ -52,19 +52,19 @@ class TestGame < Test::Unit::TestCase
         @kitesail = get_card 'Kitesail'         # artifact equipment
     end
 
-    def test_Discard_excessive_cards
+    def test_discard_excessive_cards
         player = Player.new 'Player'
         player.deck( [ 'Dwarven Soldier', 1, 'Cave Troll', 4, 'Mountain Ogre', 4 ] )
         @game.add_player player, Controller.new
 
-        @game.start_game
+        @game.start_game shuffle_cards = :DoNotShuffle
         assert( player.graveyard.empty? )
         @game.next_round     # 8 cards - 1 card should be discarded
         assert( !player.graveyard.empty? )
         assert_equal( 'Dwarven Soldier', player.graveyard.first.name )
     end
 
-    def test_Basic_blocking_abilities
+    def test_basic_blocking_abilities
         assert( @gargoyle.can_attack? && @pegasus.can_attack? && @phantom.can_attack? && @archers.can_attack? )
         assert( @gargoyle.can_block? && @pegasus.can_block? && @phantom.can_block? && @archers.can_block? )
         assert( @gargoyle.can_block? @pegasus )     # flying - flying
@@ -77,7 +77,7 @@ class TestGame < Test::Unit::TestCase
         assert( !@phantom.can_attack? && !@phantom.can_block? )
     end
 
-    def test_Enchanted_cards
+    def test_enchanted_cards
         assert( @archers.can_block? @phantom )      # basic - basic
         assert( !@phantom.has?(:fear) )
         assert( @fear.has? :fear )
@@ -86,7 +86,7 @@ class TestGame < Test::Unit::TestCase
         assert( !@archers.can_block?(@phantom) )    # basic with fear - basic
     end
 
-    def test_Eqipped_cards
+    def test_eqipped_cards
         assert( !@phantom.has?(:flying) )
         assert_equal( 3, @phantom.power )
         @kitesail.equip nil, @phantom
@@ -98,7 +98,7 @@ class TestGame < Test::Unit::TestCase
     end
 
     # Equipment detachment shouldn't remove "native" attributes
-    def test_Eqippement_removal
+    def test_eqippement_removal
         assert( @gargoyle.has?(:flying) )
         @kitesail.equip nil, @gargoyle              # @gargoyle now has "double" flying
         assert( @gargoyle.has?(:flying) )
@@ -106,7 +106,7 @@ class TestGame < Test::Unit::TestCase
         assert( @gargoyle.has?(:flying) )
     end
 
-    def test_Basic_damage_abilities
+    def test_basic_damage_abilities
         # TODO
     end
 end
