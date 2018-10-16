@@ -51,7 +51,7 @@ module YAMTG
         end
 
         def +(other)
-            Mana.new(@amount.merge(other.amount) { |key, a, b| a + b })
+            Mana.new(@amount.merge(other.amount) { |_key, a, b| a + b })
         end
 
         def -(other)
@@ -98,7 +98,7 @@ module YAMTG
 
         # returns the colors that are negative if there are any
         def negative?
-            found = @amount.reject { |k, v| !(String === v) && v >= 0 }
+            found = @amount.reject { |_k, v| !(String === v) && v >= 0 }
             found.empty? ? false : found.keys
         end
 
@@ -117,7 +117,7 @@ module YAMTG
 
         # can't print negative mana
         def to_s(x=false)
-            a         = @amount.reject { |k,v| !(String === v) && v < 1 }
+            a         = @amount.reject { |_k, v| !(String === v) && v < 1 }
             colorless = a[:colorless] ? ["(#{a.delete(:colorless)})"] : []
             infinite  = a[:infinite] ? ["(#{a.delete(:infinite).split(//).sort.join(')(')})"] : []
             if x

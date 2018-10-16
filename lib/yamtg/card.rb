@@ -58,9 +58,11 @@ module YAMTG
             def ability( name, *cost, &action)
                 abilities[name] = block_given? ? { :cost => cost, :action => Proc.new( &action ) } : { :cost => cost }
             end
+
             def tap( *val, &descr )
                 # TODO
             end
+
             def event( *val )
                 # TODO
             end

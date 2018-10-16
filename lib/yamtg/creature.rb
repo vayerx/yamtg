@@ -30,7 +30,9 @@ module YAMTG
                     class_variable_set( '@@' + name, val.first )
                 }
             }
+
             def init
+                # noinspection RubySuperCallWithoutSuperclassInspection
                 super
                 class_variable_set :@@power, 0
                 class_variable_set :@@toughness, 0
