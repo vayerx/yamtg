@@ -29,8 +29,27 @@ module YAMTG
 
         # get amount of available mana on the battlefield
         def count_available_mana
-            avail_lands = battlefield( :self ).count { |card, _| card.type? :Land and not card.tapped? }
-            mana.total + avail_lands
+            avail_mana = battlefield(:self).count do |card, _|
+                # TODO: tap for multiple mana
+                !card.tapped? && card.has?(:tap_for_mana)
+            end
+
+            mana.total + avail_mana
+        end
+
+        def aquire_mana(cost)
+            # TODO: support mana colors
+            # TODO: aquire optimal amount of mana
+            found = 0
+            battlefield(:self).each do |card|
+                next if card.tapped? || !card.has?(:tap_for_mana)
+
+                @actor.play_card_ability card, :tap_for_mana
+                # TODO: add :tap_for_mana "value"
+                if (found += 1) > cost.total
+                    break
+                end
+            end
         end
     end
 end

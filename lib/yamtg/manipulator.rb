@@ -53,6 +53,16 @@ module YAMTG
             # pp @player
         end
 
+        def play_card_ability(card, ability)
+            raise RuntimeError, "Card has no ability #{ability}" unless card.has? ability
+
+            # TODO legality checks
+
+            handler = card.abilities[ability]
+            action = handler[:action]
+            action.call(nil, card)      # TODO arena?
+        end
+
         def find_card_in_hand(&block)
             index = @player.hand.index(&block)
             index ? @player.hand[index] : nil

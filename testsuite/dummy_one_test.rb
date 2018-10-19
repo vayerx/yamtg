@@ -40,7 +40,7 @@ class TestAiDummyOne < Test::Unit::TestCase
 
         # playing land
         @game.next_round
-        assert( !@player1.battlefield.empty? )
-        assert_equal( 'Mountain', @player1.battlefield.first.name )
+        assert_equal(2, @player1.battlefield.length)
+        assert_equal('Mountain', @player1.battlefield.first.name)
     end
 end
