@@ -20,11 +20,11 @@
 #############################################################################
 
 land 'Plains' do
-    type        :Land
+    type        :Basic
     description '(Tap): Generate (W)'
 
-    tap do |arena, card|
-        card.owner.add_mana(1.white)
+    ability :tap_for_mana, :tap do |_arena, card|
+        card.controller.add_mana(1.white)
     end
 end
 

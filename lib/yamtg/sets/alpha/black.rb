@@ -20,11 +20,11 @@
 #############################################################################
 
 land 'Swamp' do
-    type        :Land
+    type        :Basic
     description '(Tap): Generate (K)'
 
-    tap do |_arena, card|
-        card.owner.add_mana(1.black)
+    ability :tap_for_mana, :tap do |_arena, card|
+        card.controller.add_mana(1.black)
     end
 end
 

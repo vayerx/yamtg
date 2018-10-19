@@ -20,11 +20,11 @@
 #############################################################################
 
 land 'Mountain' do
-    type        :Land
+    type        :Basic
     description '(Tap): Generate (R)'
 
-    tap do |arena, card|
-        card.owner.add_mana(1.red)
+    ability :tap_for_mana, :tap do |_arena, card|
+        card.controller.add_mana(1.red)
     end
 end
 

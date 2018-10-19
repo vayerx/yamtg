@@ -102,5 +102,12 @@ module YAMTG
 
 
     class Land < Tapable
+        class << self
+            def init
+                # noinspection RubySuperCallWithoutSuperclassInspection
+                super
+                type :Land
+            end
+        end
     end
 end
