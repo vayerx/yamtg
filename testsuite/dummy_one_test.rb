@@ -34,9 +34,9 @@ class TestAiDummyOne < Test::Unit::TestCase
     end
 
     def test_basics
-        @player1.deck( [ 'Mountain', 2, 'Dwarven Soldier', 4, 'Mountain', 2, 'Cave Troll', 4 ] )
+        @player1.deck(['Mountain', 2, 'Dwarven Soldier', 4, 'Mountain', 2, 'Cave Troll', 4])
         @game.start_game :dont_suffle
-        assert( @player1.battlefield.empty? )
+        assert(@player1.battlefield.empty?)
 
         # playing land
         @game.next_round

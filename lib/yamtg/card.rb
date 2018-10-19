@@ -24,20 +24,21 @@ require 'yamtg/mana'
 module YAMTG
     class Card
         class << self
-            %w[name types colors description legend abilities].each { |name|
-                define_method( name ) { |*val|
-                    return class_variable_get( '@@' + name ) if val.empty?
-                    class_variable_set( '@@' + name, val.first )
-                }
-            }
+            %w[name types colors description legend abilities].each do |name|
+                define_method(name) do |*val|
+                    return class_variable_get('@@' + name) if val.empty?
+
+                    class_variable_set('@@' + name, val.first)
+                end
+            end
 
             def init
-                class_variable_set :@@name, ""
+                class_variable_set :@@name, ''
                 class_variable_set :@@cost, Mana.new
                 class_variable_set :@@types, []
                 class_variable_set :@@colors, []
-                class_variable_set :@@description, ""
-                class_variable_set :@@legend, ""
+                class_variable_set :@@description, ''
+                class_variable_set :@@legend, ''
                 class_variable_set :@@abilities, {}
             end
 
@@ -45,32 +46,32 @@ module YAMTG
                 types :artifact
             end
 
-            def cost( *mana )
-                return class_variable_get( :@@cost ) if mana.empty?
-                class_variable_set( :@@cost, mana.inject( Mana.new ) { |a, b| a + b } )
+            def cost(*mana)
+                return class_variable_get(:@@cost) if mana.empty?
+
+                class_variable_set(:@@cost, mana.inject(Mana.new) { |a, b| a + b })
             end
 
-            def type( *name )
+            def type(*name)
                 return types if name.empty?
-                types( types.concat name )
+
+                types(types.concat(name))
             end
 
-            def ability( name, *cost, &action)
-                abilities[name] = block_given? ? { :cost => cost, :action => Proc.new( &action ) } : { :cost => cost }
+            def ability(name, *cost, &action)
+                abilities[name] = block_given? ? { cost: cost, action: Proc.new(&action) } : { cost: cost }
             end
 
-            def tap( *val, &descr )
+            def tap(*val, &descr)
                 # TODO
             end
 
-            def event( *val )
+            def event(*val)
                 # TODO
             end
         end
 
-    public      # card owner is set by owner :)
         attr_accessor :owner, :controller
-
         attr_reader :name, :description, :legend
         attr_accessor :cost, :types, :colors, :abilities
 
@@ -86,7 +87,7 @@ module YAMTG
         end
 
         def type
-            @types.empty? ? "" : @types.first
+            @types.empty? ? '' : @types.first
         end
 
         def type?(type)
@@ -105,16 +106,14 @@ module YAMTG
             is_a? Permanent
         end
 
-        def has?( name )
+        def has?(name)
             @abilities.include? name
         end
     end
-
 
     class Sorcery < Card
     end
 
     class Instant < Card
     end
-
 end

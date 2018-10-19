@@ -19,7 +19,7 @@
 #############################################################################
 
 require 'yamtg/set.rb'
-YAMTG::GlobalSets.instance.add("M10")
+YAMTG::GlobalSets.instance.add('M10')
 include YAMTG
 
 require 'yamtg/sets/m10/black'

@@ -20,7 +20,6 @@
 
 require 'yamtg/manipulator'
 require 'yamtg/player'
-require 'enumerator'    # ruby 1.8
 
 module YAMTG
     class Game
@@ -32,34 +31,39 @@ module YAMTG
             @active_index = nil
         end
 
-        def add_player( player, controller )
+        def add_player(player, controller)
             @players << player
             controller.actor = Manipulator.new self, player
             @controllers << controller
         end
 
-        def start_game( shuffle_cards = :shuffle )
-            raise RuntimeError, "Can't start game -- no players" if @players.empty?
+        def start_game(shuffle_cards = :shuffle)
+            raise "Can't start game -- no players" if @players.empty?
+
             @active_index = 0
             @players.each { |player| player.deck.shuffle! } if shuffle_cards == :shuffle
             @players.each { |player| player.draw 7 }
         end
 
         def next_round
-            raise RuntimeError, "Game over" if game_over?
-            do_player_step( *active_player )
+            raise 'Game over' if game_over?
+
+            do_player_step(*active_player)
             next_player
         end
 
         def game_over?
-            raise RuntimeError, "No players" if @players.empty?
-            @players.all? { |player| player.dead? }
+            raise 'No players' if @players.empty?
+
+            @players.all?(&:dead?)
         end
 
     private
-        def active_player       # TODO rename/split - return controller
-            raise RuntimeError, "No active player -- game hasn't started" if @active_index == nil
-            [@controllers.fetch( @active_index ), @players.fetch( @active_index )]
+
+        def active_player   # TODO: rename/split - return controller
+            raise "No active player -- game hasn't started" if @active_index.nil?
+
+            [@controllers.fetch(@active_index), @players.fetch(@active_index)]
         end
 
         def next_player
@@ -70,7 +74,7 @@ module YAMTG
             true
         end
 
-        def do_player_step( controller, player )
+        def do_player_step(controller, player)
             controller.on_untap_step
             controller.on_upkeep_step
             controller.on_draw_step
@@ -89,7 +93,8 @@ module YAMTG
             if player.hand.size > player.max_hand_size
                 excessive = player.hand.size - player.max_hand_size
                 range = controller.on_discard_cards excessive
-                raise RuntimeError, "Discarded #{range.count} cards instead of #{excessive}" if range.count != excessive
+                raise "Discarded #{range.count} cards instead of #{excessive}" if range.count != excessive
+
                 player.discard range
             end
         end

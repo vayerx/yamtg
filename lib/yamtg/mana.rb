@@ -22,10 +22,9 @@
 require 'set'
 
 module YAMTG
-
     class Mana
-        Colors = %i{red green blue black white colorless}
-        Chars  = { :red => "R", :green => "G", :blue => "B", :black => "K", :white => "W" }
+        Colors = %i[red green blue black white colorless].freeze
+        Chars  = { red: 'R', green: 'G', blue: 'B', black: 'K', white: 'W' }.freeze
 
         class << self
             def self.sort(colors)
@@ -37,12 +36,12 @@ module YAMTG
         attr_reader :total      # total amount
         attr_reader :colors     # colors set (TODO excessive value)
 
-        def initialize(mana={})
+        def initialize(mana = {})
             @amount = Hash[*mana.map { |k, v| Array === k ? [Mana.sort(k), v] : [k, v] }.flatten]
             @amount.reject! { |k, v| k != :infinite && v.zero? }
             @amount.freeze
             @total  = @amount.values.inject(0) { |a, b| String === b ? a : a + b }
-            @colors = @amount.keys.inject(Set.new) { |res, color| res << color if color != :colorless; res }
+            @colors = @amount.keys.each_with_object(Set.new) { |color, res| res << color if color != :colorless; }
             @colors = [:colorless] if @colors.empty?
         end
 
@@ -55,16 +54,18 @@ module YAMTG
         end
 
         def -(other)
-            raise RuntimeError, "Don't know how to substract #{other.class} from Mana" unless other.is_a? Mana
-            raise RuntimeError, "Colorless mana detected!" if @amount.include? :colorless
+            raise "Don't know how to substract #{other.class} from Mana" unless other.is_a? Mana
+            raise 'Colorless mana detected!' if @amount.include? :colorless
+
             new = @amount.dup
             # exact matching
             other.amount.each do |color, amount|
-                if color != :colorless
-                    value = new[color]
-                    raise RuntimeError, "Not enough #{color} mana: #{value} < #{amount}" if not value or value < amount
-                    value > amount ? new[color] -= amount : new.delete( color )
-                end
+                next unless color != :colorless
+
+                value = new[color]
+                raise "Not enough #{color} mana: #{value} < #{amount}" if !value || (value < amount)
+
+                value > amount ? new[color] -= amount : new.delete(color)
             end
 
             # handle colorless
@@ -74,13 +75,16 @@ module YAMTG
                     colorless -= (value = [colorless, amount].min)
                     (new[color] -= value) == 0
                 end
-                raise RuntimeError, "Oops, not enough mana to substract colorless" if colorless != 0
+                raise 'Oops, not enough mana to substract colorless' if colorless != 0
             end
             Mana.new(new)
         end
 
         def <(other)
-            (!(self - other).zero?) rescue true   # TODO optimize
+            # TODO: optimize
+            !(self - other).zero?
+        rescue StandardError
+            true
         end
 
         def >(other)
@@ -88,8 +92,9 @@ module YAMTG
         end
 
         def ==(other)
-            return false if other.amount != @amount or other.total != @total
-            other.amount.each { |color, amount| return false if @amount[color] == nil or @amount[color] != amount }
+            return false if (other.amount != @amount) || (other.total != @total)
+
+            other.amount.each { |color, amount| return false if @amount[color].nil? || (@amount[color] != amount) }
         end
 
         def color
@@ -107,7 +112,7 @@ module YAMTG
         end
 
         def infer_color
-            k = @amount.keys - [:colorless, :infinite]
+            k = @amount.keys - %i[colorless infinite]
             if k.empty?
                 :artifact
             else
@@ -116,42 +121,41 @@ module YAMTG
         end
 
         # can't print negative mana
-        def to_s(x=false)
+        def to_s(x = false)
             a         = @amount.reject { |_k, v| !(String === v) && v < 1 }
             colorless = a[:colorless] ? ["(#{a.delete(:colorless)})"] : []
             infinite  = a[:infinite] ? ["(#{a.delete(:infinite).split(//).sort.join(')(')})"] : []
             if x
                 monocolor  = Mana::Colors.map { |color| "#{a.delete(color)}x(#{Mana::Chars[color]})" if a[color] }.compact
-                multicolor = a.map { |k,v| "#{v}x(#{k.map { |color| Mana::Chars[color] }.join('/')})" }
-                (multicolor + monocolor + colorless + infinite).join(", ")
+                multicolor = a.map { |k, v| "#{v}x(#{k.map { |color| Mana::Chars[color] }.join('/')})" }
+                (multicolor + monocolor + colorless + infinite).join(', ')
             else
-                monocolor  = Mana::Colors.map { |color| "(#{Mana::Chars[color]})"*a.delete(color) if a[color] }.compact
-                multicolor = a.map { |k,v| "(#{k.map { |color| Mana::Chars[color] }.join('/')})"*v }
-                (multicolor + monocolor + colorless + infinite).join("")
+                monocolor  = Mana::Colors.map { |color| "(#{Mana::Chars[color]})" * a.delete(color) if a[color] }.compact
+                multicolor = a.map { |k, v| "(#{k.map { |color| Mana::Chars[color] }.join('/')})" * v }
+                (multicolor + monocolor + colorless + infinite).join('')
             end
         end
 
         def inspect
             if @amount.empty?
-                "#<%s total: %d>" %  [self.class, @total]
+                format('#<%s total: %d>', self.class, @total)
             else
-                "#<%s total: %d, %s>" %  [self.class, @total, @amount.map { |k,v|
+                format('#<%s total: %d, %s>', self.class, @total, @amount.map do |k, v|
                     "#{Array === k ? k.join('/') : k.to_s}: #{v}"
-                }.join(', ')]
+                end.join(', '))
             end
         end
     end
 
-    X = Mana.new(:infinite => "X")
-    Y = Mana.new(:infinite => "Y")
-    Z = Mana.new(:infinite => "Z")
-
+    X = Mana.new(infinite: 'X')
+    Y = Mana.new(infinite: 'Y')
+    Z = Mana.new(infinite: 'Z')
 end
 
 class Integer
-    YAMTG::Mana::Colors.each { |color|
-        define_method( color ) {
-            YAMTG::Mana.new( color => self )
-        }
-    }
+    YAMTG::Mana::Colors.each do |color|
+        define_method(color) do
+            YAMTG::Mana.new(color => self)
+        end
+    end
 end

@@ -18,10 +18,7 @@
 #    59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.              #
 #############################################################################
 
-require 'enumerator'    # ruby 1.8
-
 module YAMTG
-
     # Remote-side player operating via Manipulator
     class Controller
         attr_accessor :actor    # Manipulator
@@ -34,7 +31,7 @@ module YAMTG
         # Beginning Phase: untap, upkeep, and draw
         #
         def on_untap_step
-            battlefield( :self ).each { |card, _| card.untap if card.tapped? }
+            battlefield(:self).each { |card, _| card.untap if card.tapped? }
         end
 
         def on_upkeep_step
@@ -81,12 +78,12 @@ module YAMTG
         end
 
         # Choose cards to discard to graveyard
-        def on_discard_cards( amount )
+        def on_discard_cards(amount)
             0...amount
         end
 
         # Choose cards to exile
-        def on_exile_cards( amount )
+        def on_exile_cards(amount)
             0...amount
         end
 
@@ -95,11 +92,11 @@ module YAMTG
             @actor.max_hand_size
         end
 
-        def battlefield( name = :all, &block )
+        def battlefield(name = :all, &block)
             if block_given?
-                @actor.battlefield( name, &block )
+                @actor.battlefield(name, &block)
             else
-                @actor.to_enum( :battlefield, name )
+                @actor.to_enum(:battlefield, name)
             end
         end
 

@@ -19,7 +19,7 @@
 #############################################################################
 
 require 'yamtg/set.rb'
-YAMTG::GlobalSets.instance.add("Worldwake")
+YAMTG::GlobalSets.instance.add('Worldwake')
 include YAMTG
 
 # require 'yamtg/sets/worldwake/black'

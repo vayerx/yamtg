@@ -74,9 +74,7 @@ creature 'Knight of the Sacred Rose' do
     first_strike
 
     legend 'Honour is my life.'
-
 end
-
 
 # Also a decent fighter but got a big horse as his mount, so has
 # a higher offense power while retaining first strike.

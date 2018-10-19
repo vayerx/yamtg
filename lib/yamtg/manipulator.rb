@@ -22,18 +22,18 @@ module YAMTG
     # Proxy between game-side Player and Controller on remote-side (person or AI)
     class Manipulator
         attr_accessor :game, :player
-        def initialize( game, player )
+        def initialize(game, player)
             raise ArgumentError unless player.is_a? Player
 
             @game = game
             @player = player
         end
 
-        def draw_card( amount = 1 )
+        def draw_card(amount = 1)
             @player.draw amount
         end
 
-        def discard_card( index_or_range = 0 )
+        def discard_card(index_or_range = 0)
             @player.discard index_or_range
         end
 
@@ -42,7 +42,8 @@ module YAMTG
             raise IndexError, "No such card in hand: #{card}" unless @player.hand.index card
 
             # TODO: card-specific costs
-            raise RuntimeError, "Not enough mana to play #{card.inspect}: #{@player.mana} < #{card.cost}" if @player.mana < card.cost
+            raise "Not enough mana to play #{card.inspect}: #{@player.mana} < #{card.cost}" if @player.mana < card.cost
+
             @player.mana -= card.cost
 
             # TODO: card-dependent logic!
@@ -54,13 +55,13 @@ module YAMTG
         end
 
         def play_card_ability(card, ability)
-            raise RuntimeError, "Card has no ability #{ability}" unless card.has? ability
+            raise "Card has no ability #{ability}" unless card.has? ability
 
-            # TODO legality checks
+            # TODO: legality checks
 
             handler = card.abilities[ability]
             action = handler[:action]
-            action.call(nil, card)      # TODO arena?
+            action.call(nil, card) # TODO: arena?
         end
 
         def find_card_in_hand(&block)
@@ -76,10 +77,10 @@ module YAMTG
             @player.max_hand_size
         end
 
-        def battlefield( name = :all )
+        def battlefield(name = :all)
             name = player_name if name == :self
             @game.players.each do |player|
-                player.battlefield.each { |card| yield card, player.name } if name == :all or player.name == name
+                player.battlefield.each { |card| yield card, player.name } if (name == :all) || (player.name == name)
             end
         end
 

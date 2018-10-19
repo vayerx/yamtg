@@ -32,7 +32,7 @@ module YAMTG
         attr_accessor :graveyard
         attr_accessor :mana
 
-        def initialize( name, health = 20, hand_size = 7 )
+        def initialize(name, health = 20, hand_size = 7)
             @name          = name.freeze
             @health        = health
             @max_hand_size = hand_size
@@ -43,32 +43,33 @@ module YAMTG
             @mana          = Mana.new
         end
 
-        def deck( *var )
+        def deck(*var)
             return @deck if var.empty?
-            raise ArgumentError, "Invalid args amount #{var.size}" if var.first.is_a? Deck and var.size != 1
-            @deck = var.first.is_a?( Deck ) ? var.first : Deck.new( var.first )
-            @deck.each {|v| v.owner = self }
+            raise ArgumentError, "Invalid args amount #{var.size}" if var.first.is_a?(Deck) && (var.size != 1)
+
+            @deck = var.first.is_a?(Deck) ? var.first : Deck.new(var.first)
+            @deck.each { |v| v.owner = self }
         end
 
         def cards_left?
-            not @deck.empty?
+            !@deck.empty?
         end
 
         def dead?
             @health <= 0
         end
 
-        def draw( amount = 1 )
-            @hand.concat @deck.draw( amount )
+        def draw(amount = 1)
+            @hand.concat @deck.draw(amount)
         end
 
-        def discard( index_or_range = 0 )
+        def discard(index_or_range = 0)
             discarded = @hand.slice! index_or_range
             @graveyard.concat discarded
             discarded
         end
 
-        def add_mana( mana )
+        def add_mana(mana)
             @mana += mana
         end
     end

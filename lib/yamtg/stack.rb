@@ -23,21 +23,22 @@ require 'yamtg/set'
 
 module YAMTG
     class Stack < Array
-        def initialize( cards = [] )
+        def initialize(cards = [])
             super().replace(cards)
         end
 
         # Get a random element of this stack
         # With an argument it gets you n elements without no index used more than once
-        def random( n = nil )
+        def random(n = nil)
             if n
-                raise ArgumentError unless Integer === n and n.between?(0, length)
+                raise ArgumentError unless (Integer === n) && n.between?(0, length)
+
                 arr = dup
                 l = length
-                n.times { |i|
+                n.times do |i|
                     r = rand(l - i) + i
                     arr[r], arr[i] = arr[i], arr[r]
-                }
+                end
                 arr.first(n)
             else
                 at(rand(length))

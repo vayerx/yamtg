@@ -56,7 +56,7 @@ creature 'Cave Troll' do
         @anger += 1
     end
 
-    event :end_of_turn do |arena, card|
+    event :end_of_turn do |_arena, card|
         card.anger = 0
     end
 
@@ -66,11 +66,11 @@ creature 'Cave Troll' do
     end
 
     def power
-        unmodified_power + @anger*4
+        unmodified_power + @anger * 4
     end
 
     def toughness
-        unmodified_toughness - @anger*1
+        unmodified_toughness - @anger * 1
     end
 
     def inspect
@@ -93,7 +93,7 @@ creature 'Stonewall' do
         @anger += 1
     end
 
-    event :end_of_turn do |arena, card|
+    event :end_of_turn do |_arena, card|
         card.anger -= 1 if card.anger > 0
     end
 
@@ -103,7 +103,7 @@ creature 'Stonewall' do
     end
 
     def power
-        unmodified_power + @anger*3
+        unmodified_power + @anger * 3
     end
 
     def inspect

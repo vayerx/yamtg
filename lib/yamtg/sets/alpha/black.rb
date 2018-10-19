@@ -41,15 +41,15 @@ creature 'Tarpit' do
          the deeper he sank into the undefinable black fluid.
     LEGEND_END
 
-#     ability :drown, 2.black do |arena, card|
-#         raise InvalidTiming unless card.blocking?
-#         destroy = if card.blocking.length > 1 then
-#             card.owner.pick_card(card.blocking)
-#         else
-#             card.blocking.first
-#         end
-#         arena.destroy(card, :end_of_turn)
-#     end
+    #     ability :drown, 2.black do |arena, card|
+    #         raise InvalidTiming unless card.blocking?
+    #         destroy = if card.blocking.length > 1 then
+    #             card.owner.pick_card(card.blocking)
+    #         else
+    #             card.blocking.first
+    #         end
+    #         arena.destroy(card, :end_of_turn)
+    #     end
 end
 
 creature 'Dead Rat' do
