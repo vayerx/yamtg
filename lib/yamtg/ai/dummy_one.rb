@@ -21,6 +21,7 @@
 require 'yamtg/ai/controller'
 
 module YAMTG
+    # Simple AI
     class AiDummyOne < AiController
         #
         # Main Phase
@@ -36,7 +37,7 @@ module YAMTG
                 creature = @actor.find_card_in_hand { |card| card.type?(:Creature) && (card.cost.total <= avail_mana) }
                 break unless creature
 
-                aquire_mana creature.cost
+                acquire_mana creature.cost
                 @actor.play_card creature
                 avail_mana -= creature.cost.total
             end

@@ -54,7 +54,7 @@ module YAMTG
         end
 
         def -(other)
-            raise "Don't know how to substract #{other.class} from Mana" unless other.is_a? Mana
+            raise "Don't know how to subtract #{other.class} from Mana" unless other.is_a? Mana
             raise 'Colorless mana detected!' if @amount.include? :colorless
 
             new = @amount.dup
@@ -75,7 +75,7 @@ module YAMTG
                     colorless -= (value = [colorless, amount].min)
                     (new[color] -= value) == 0
                 end
-                raise 'Oops, not enough mana to substract colorless' if colorless != 0
+                raise 'Oops, not enough mana to subtract colorless' if colorless != 0
             end
             Mana.new(new)
         end

@@ -20,7 +20,6 @@
 
 require 'yamtg/mana'
 require 'yamtg/deck'
-require 'yamtg/stack'
 
 module YAMTG
     class Player
@@ -39,7 +38,7 @@ module YAMTG
             @hand          = []
             @battlefield   = []
             @deck          = Deck.new
-            @graveyard     = Stack.new
+            @graveyard     = []
             @mana          = Mana.new
         end
 

@@ -86,7 +86,7 @@ class TestGame < Test::Unit::TestCase
         assert(!@archers.can_block?(@phantom)) # basic with fear - basic
     end
 
-    def test_eqipped_cards
+    def test_equipped_cards
         assert(!@phantom.has?(:flying))
         assert_equal(3, @phantom.power)
         @kitesail.equip nil, @phantom
@@ -98,7 +98,7 @@ class TestGame < Test::Unit::TestCase
     end
 
     # Equipment detachment shouldn't remove "native" attributes
-    def test_eqippement_removal
+    def test_equipment_removal
         assert(@gargoyle.has?(:flying))
         @kitesail.equip nil, @gargoyle # @gargoyle now has "double" flying
         assert(@gargoyle.has?(:flying))

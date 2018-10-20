@@ -51,7 +51,7 @@ class TestMana < Test::Unit::TestCase
         assert(1.black < 2.black)
         assert(!(1.black < 1.black))
         assert(!(1.black > 1.black))
-        assert(1.colorless < 1.black)       # can't substract from colorless (TODO throw?)
+        assert(1.colorless < 1.black)       # can't subtract from colorless (TODO throw?)
         assert(!(1.colorless > 1.black))
     end
 end

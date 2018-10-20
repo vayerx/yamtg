@@ -23,6 +23,7 @@ require 'yamtg/permanent'
 
 module YAMTG
     class Creature < Tapable
+        # noinspection RubyClassVariableUsageInspection
         class << self
             %w[power toughness].each do |name|
                 define_method(name) do |*val|

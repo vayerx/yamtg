@@ -65,5 +65,5 @@ end
 
 sorcery 'Duress' do
     cost        1.black
-    description 'Target oppenent reveals his or her hand...'
+    description 'Target opponent reveals his or her hand...'
 end

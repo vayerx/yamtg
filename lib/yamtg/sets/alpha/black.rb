@@ -81,7 +81,7 @@ creature 'Gargoyle' do
 
     flying
 
-    description '(K): Turn gargoyle into 0/4 non-flying artefact until end of turn.'
+    description '(K): Turn gargoyle into 0/4 non-flying artifact until end of turn.'
     legend      'Stone at day, murdering beast at night.'
 
     ability :morph, 1.black do |_arena, card|
@@ -91,8 +91,8 @@ creature 'Gargoyle' do
         card.morph(false)
     end
 
-    def morph(to_artefact)
-        if to_artefact
+    def morph(to_artifact)
+        if to_artifact
             @power      = 0
             @toughness  = 4
             @flags      = []

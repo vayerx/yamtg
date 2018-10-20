@@ -62,7 +62,7 @@ class TestCore < Test::Unit::TestCase
         end
     end
 
-    def test_Phantom
+    def test_phantom
         card = new_card 'Cloud Phantom', Creature
         assert_equal(:Creature, card.type)
         assert(card.type?(:Illusion))
@@ -75,7 +75,7 @@ class TestCore < Test::Unit::TestCase
     end
 
     # independent attributes (compared with Cloud Phantom)
-    def test_Zephyr
+    def test_zephyr
         card = new_card 'Zephyr of the sky', Creature
         assert_equal(:Creature, card.type)
         assert(card.type?(:Bird))
@@ -94,7 +94,7 @@ class TestCore < Test::Unit::TestCase
     end
 
     # Sorcery
-    def test_Duress
+    def test_duress
         card = new_card 'Duress', Sorcery
         assert(!card.permanent?)
         assert_equal(:black, card.color)
@@ -113,7 +113,7 @@ class TestCore < Test::Unit::TestCase
     end
 
     # "dynamic" attributes
-    def test_Stonewall
+    def test_stonewall
         card = new_card 'Stonewall', Creature
         assert(!card.can_attack?)
         assert(card.defender?)

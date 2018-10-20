@@ -23,7 +23,9 @@ require 'yamtg/mana'
 
 module YAMTG
     class Card
+        # noinspection RubyClassVariableUsageInspection
         class << self
+            # TODO: subtypes
             %w[name types colors description legend abilities].each do |name|
                 define_method(name) do |*val|
                     return class_variable_get('@@' + name) if val.empty?

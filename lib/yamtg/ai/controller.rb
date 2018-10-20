@@ -21,6 +21,7 @@
 require 'yamtg/controller'
 
 module YAMTG
+    # AI helper
     class AiController < Controller
         def play_some_land
             land = @actor.find_card_in_hand { |card| card.type? :Land }
@@ -31,15 +32,17 @@ module YAMTG
         def count_available_mana
             avail_mana = battlefield(:self).count do |card, _|
                 # TODO: tap for multiple mana
+                # TODO: support other mana sources
                 !card.tapped? && card.has?(:tap_for_mana)
             end
 
             mana.total + avail_mana
         end
 
-        def aquire_mana(cost)
+        def acquire_mana(cost)
             # TODO: support mana colors
-            # TODO: aquire optimal amount of mana
+            # TODO: acquire optimal amount of mana
+            # TODO: atomicity -- don't play cards abilities if there is not enough mana
             found = 0
             battlefield(:self).each do |card|
                 next if card.tapped? || !card.has?(:tap_for_mana)
